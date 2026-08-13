@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТРАЕКТОРИЯ → MIT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A2A43;
+    --bg-deep: #071D30;
+    --panel: #0F3B5C;
+    --panel-line: rgba(126,200,227,0.16);
+    --grid: rgba(126,200,227,0.07);
+    --ink: #EAF3F8;
+    --ink-dim: #8FB0C4;
+    --ink-faint: #5A7E93;
+    --cyan: #7EC8E3;
+    --amber: #F2A93B;
+    --done: #6FCF97;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/40px 40px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/40px 40px,
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    padding-bottom:80px;
+  }
+  a{color:var(--cyan);}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px;}
+
+  /* ---- header / title block ---- */
+  header{
+    border-bottom:1px solid var(--panel-line);
+    padding:28px 0 22px;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    color:var(--amber);
+    text-transform:uppercase;
+    display:flex;
+    justify-content:space-between;
+  }
+  h1{
+    font-family:var(--mono);
+    font-weight:800;
+    font-size:clamp(28px,7vw,44px);
+    letter-spacing:.02em;
+    margin:10px 0 6px;
+  }
+  h1 .arrow{color:var(--amber);}
+  .subtitle{color:var(--ink-dim);font-size:14px;max-width:560px;}
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;
+  }
+  .meta-chip{
+    font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+    border:1px solid var(--panel-line);padding:6px 10px;color:var(--ink-dim);
+  }
+  .meta-chip b{color:var(--cyan);font-weight:600;}
+
+  /* ---- overall progress ---- */
+  .progress-block{margin-top:20px;}
+  .progress-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+    color:var(--ink-dim);display:flex;justify-content:space-between;margin-bottom:6px;
+  }
+  .progress-track{height:8px;background:var(--panel);border:1px solid var(--panel-line);position:relative;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--amber));width:0%;transition:width .4s ease;}
+
+  /* ---- trajectory chart ---- */
+  .chart-wrap{margin:34px 0 10px;border:1px solid var(--panel-line);background:var(--bg-deep);padding:18px 14px 8px;}
+  .chart-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:10px;}
+  svg{width:100%;height:auto;display:block;}
+  .node{cursor:pointer;}
+  .node circle{fill:var(--bg-deep);stroke:var(--ink-faint);stroke-width:1.5;transition:.2s;}
+  .node.done circle{fill:var(--done);stroke:var(--done);}
+  .node text{font-family:var(--mono);}
+  .node .year{fill:var(--ink-dim);font-size:10px;}
+  .node .label{fill:var(--ink);font-size:9.5px;}
+  .traj-path{fill:none;stroke:var(--cyan);stroke-width:1.5;stroke-dasharray:4 3;opacity:.55;}
+
+  /* ---- section cards ---- */
+  section.card{
+    margin-top:18px;border:1px solid var(--panel-line);background:rgba(15,59,92,0.35);
+  }
+  .card-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:14px 16px;cursor:pointer;user-select:none;
+  }
+  .card-head:hover{background:rgba(126,200,227,0.05);}
+  .card-num{font-family:var(--mono);color:var(--amber);font-size:12px;min-width:26px;}
+  .card-title{font-family:var(--mono);font-weight:600;font-size:14.5px;letter-spacing:.02em;flex:1;}
+  .chev{color:var(--ink-faint);font-family:var(--mono);transition:transform .2s;font-size:13px;}
+  .card.open .chev{transform:rotate(90deg);}
+  .card-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .card.open .card-body{max-height:3000px;}
+  .card-inner{padding:0 16px 18px 52px;font-size:14px;color:var(--ink-dim);}
+  .card-inner h4{color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.05em;margin:14px 0 6px;text-transform:uppercase;}
+  .card-inner ul{margin:6px 0;padding-left:18px;}
+  .card-inner li{margin-bottom:4px;}
+  .card-inner p{margin:6px 0;}
+  .card-inner table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+  .card-inner th,.card-inner td{border:1px solid var(--panel-line);padding:6px 8px;text-align:left;}
+  .card-inner th{font-family:var(--mono);color:var(--cyan);font-weight:600;font-size:11px;background:rgba(126,200,227,0.06);}
+
+  /* ---- checklist items ---- */
+  .check-item{
+    display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13.5px;color:var(--ink-dim);
+    border-bottom:1px dashed var(--panel-line);
+  }
+  .check-item:last-child{border-bottom:none;}
+  .check-item input{margin-top:3px;accent-color:var(--amber);width:15px;height:15px;flex-shrink:0;cursor:pointer;}
+  .check-item.checked span{color:var(--ink-faint);text-decoration:line-through;}
+  .check-item span{cursor:pointer;}
+
+  /* ---- dashboard counters ---- */
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+  .dash-cell{border:1px solid var(--panel-line);padding:12px;background:var(--bg-deep);}
+  .dash-cell .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase;}
+  .dash-cell .v-row{display:flex;align-items:center;gap:8px;margin-top:6px;}
+  .dash-cell input[type=number]{
+    width:56px;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);
+    font-family:var(--mono);font-size:16px;padding:4px 6px;
+  }
+  .dash-cell .target{font-family:var(--mono);color:var(--ink-faint);font-size:12px;}
+
+  /* ---- weekly grid ---- */
+  .week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:8px;}
+  .day-col{border:1px solid var(--panel-line);padding:10px;background:var(--bg-deep);}
+  .day-col .d-name{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+
+  /* ---- title block footer ---- */
+  .titleblock{
+    margin-top:34px;border:1px solid var(--panel-line);
+    display:grid;grid-template-columns:1fr 1fr;font-family:var(--mono);font-size:11px;
+  }
+  .titleblock div{padding:10px 12px;border-right:1px solid var(--panel-line);border-bottom:1px solid var(--panel-line);}
+  .titleblock div:nth-child(2n){border-right:none;}
+  .titleblock .tl-label{color:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase;font-size:9.5px;display:block;margin-bottom:4px;}
+  .titleblock input{background:transparent;border:none;color:var(--cyan);font-family:var(--mono);font-size:13px;width:100%;outline:none;}
+
+  footer{text-align:center;color:var(--ink-faint);font-family:var(--mono);font-size:11px;margin-top:26px;letter-spacing:.05em;}
+
+  ::selection{background:var(--amber);color:var(--bg-deep);}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow"><span>ДОКУМЕНТ №001 · ЛИЧНАЯ ТРАЕКТОРИЯ</span><span id="today"></span></div>
+    <h1>ТРАЕКТОРИЯ <span class="arrow">→</span> MIT</h1>
+    <div class="subtitle">Специалитет 10.05.01 «Компьютерная безопасность» · ИКИТ СФУ · 2026–2031</div>
+    <div class="meta-row">
+      <div class="meta-chip">СТАРТ <b>01.09.2026</b></div>
+      <div class="meta-chip">ЦЕЛЬ <b>MIT, 2029–2031</b></div>
+      <div class="meta-chip">TOEFL ЦЕЛЬ <b>100–110</b></div>
+    </div>
+    <div class="progress-block">
+      <div class="progress-label"><span>ОБЩИЙ ПРОГРЕСС ПО ЗАДАЧАМ</span><span id="progress-pct">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </header>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Траектория · 2026 → 2031</div>
+    <svg id="traj-svg" viewBox="0 0 860 200"></svg>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Текущие показатели</div>
+    <div class="dash-grid">
+      <div class="dash-cell">
+        <div class="k">TOEFL (текущий)</div>
+        <div class="v-row"><input type="number" id="d-toefl" min="0" max="120" value="0"><span class="target">/ 110</span></div>
+      </div>
+      <div class="dash-cell">
+        <div class="k">Публикации</div>
+        <div class="v-row"><input type="number" id="d-pubs" min="0" value="0"><span class="target">/ 6</span></div>
+      </div>
+      <div class="dash-cell">
+        <div class="k">GitHub проекты</div>
+        <div class="v-row"><input type="number" id="d-github" min="0" value="0"><span class="target">/ 10</span></div>
+      </div>
+      <div class="dash-cell">
+        <div class="k">Рекомендации</div>
+        <div class="v-row"><input type="number" id="d-recs" min="0" value="0"><span class="target">/ 4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sections"></div>
+
+  <div class="titleblock">
+    <div><span class="tl-label">Автор траектории</span><input id="tb-name" placeholder="твоё имя"></div>
+    <div><span class="tl-label">Специальность</span><input value="10.05.01 Компьютерная безопасность" readonly></div>
+    <div><span class="tl-label">Вуз</span><input value="ИКИТ СФУ" readonly></div>
+    <div><span class="tl-label">Цель</span><input value="MIT — EECS / Sloan" readonly></div>
+  </div>
+
+  <footer>ПРОГРЕСС СОХРАНЯЕТСЯ ЛОКАЛЬНО В БРАУЗЕРЕ · ПОСЛЕ РАЗМЕЩЕНИЯ НА GITHUB PAGES ДАННЫЕ БУДУТ СОХРАНЯТЬСЯ МЕЖДУ ВИЗИТАМИ</footer>
+</div>
+
+<script>
+/* ---------- storage (localStorage with in-memory fallback) ---------- */
+const memStore = {};
+const storage = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return memStore[k] ?? null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+function loadState(){
+  try{ return JSON.parse(storage.get('mit-trajectory-state') || '{}'); }catch(e){ return {}; }
+}
+function saveState(state){
+  storage.set('mit-trajectory-state', JSON.stringify(state));
+}
+let state = loadState();
+
+document.getElementById('today').textContent = new Date().toLocaleDateString('ru-RU',{year:'numeric',month:'long',day:'numeric'});
+
+/* ---------- dashboard counters ---------- */
+const dashIds = ['d-toefl','d-pubs','d-github','d-recs'];
+dashIds.forEach(id=>{
+  const el = document.getElementById(id);
+  el.value = state[id] ?? 0;
+  el.addEventListener('input', ()=>{ state[id] = el.value; saveState(state); });
+});
+
+/* ---------- title block name ---------- */
+const nameEl = document.getElementById('tb-name');
+nameEl.value = state['tb-name'] || '';
+nameEl.addEventListener('input', ()=>{ state['tb-name'] = nameEl.value; saveState(state); });
+
+/* ---------- content data ---------- */
+const sections = [
+  {
+    id:'intro', num:'01', title:'ВВЕДЕНИЕ',
+    body:`<p>Обучение в ИКИТ СФУ по специальности «Компьютерная безопасность» начинается в сентябре 2026. За 5,5 лет — параллельно основной программе — идёт подготовка к поступлению в MIT (EECS или Sloan).</p>
+    <h4>MIT требует</h4>
+    <ul>
+      <li>TOEFL 100–110 (академический английский)</li>
+      <li>Математику: линейная алгебра, дискретная математика, теория чисел, анализ</li>
+      <li>Физику: квантовая механика, оптика, механика</li>
+      <li>Научные рекомендации и публикации</li>
+      <li>Портфолио на GitHub</li>
+    </ul>
+    <p>Проходной балл ИКИТ по специалитету ≈ 263. Для не носителей языка MIT: TOEFL min 100, рекомендуется 100+.</p>`
+  },
+  {
+    id:'goals', num:'02', title:'ОБЩИЕ ЦЕЛИ К 2031 ГОДУ',
+    body:`<ul>
+      <li>TOEFL iBT: 105–110 (25–30 в каждом разделе)</li>
+      <li>Математика на уровне 1-го курса MIT (6.042 + 6.043) + алгоритмы и криптография</li>
+      <li>Физика на уровне 1-го курса MIT + квантовая механика</li>
+      <li>Публикации: минимум 4–6 (2–3 российские + 2–3 международные)</li>
+      <li>Рекомендации: 3–4 от научруков ИКИТ + 1–2 международные</li>
+      <li>GitHub: 5–7 проектов по безопасности (CTF, криптография, анализ сетей)</li>
+      <li>GPA в вузе: 4.5+</li>
+    </ul>`
+  },
+  {
+    id:'english', num:'03', title:'АНГЛИЙСКИЙ (ПРИОРИТЕТ №1)',
+    body:`<h4>Целевые даты TOEFL</h4>
+    <ul>
+      <li>Май 2027 — TOEFL ≈ 95–100</li>
+      <li>Май 2028 — TOEFL 100–105</li>
+      <li>Май 2029 — TOEFL 105–110</li>
+    </ul>
+    <h4>Ежедневный режим (2–2,5 ч)</h4>
+    <ul>
+      <li>40 мин — speaking (запись себя, MIT pronunciation guide)</li>
+      <li>40 мин — writing (эссе TOEFL/IELTS)</li>
+      <li>30 мин — reading (научные статьи MIT OCW)</li>
+      <li>30 мин — listening (подкасты MIT + TED + MIT Tech Talks)</li>
+      <li>20 мин — vocabulary (5–10 слов в день по IT/security)</li>
+    </ul>
+    <h4>Инструменты</h4>
+    <p>Duolingo/Babbel, British Council/ETS (тест каждые 3 мес.), YouTube «MIT OCW lectures», трекер в Notion/Excel.</p>`
+  },
+  {
+    id:'mathphys', num:'04', title:'МАТЕМАТИКА И ФИЗИКА',
+    body:`<h4>Математика (ежедневно 2–2,5 ч)</h4>
+    <ul>
+      <li>Сентябрь–декабрь 2026: углубление 11 класса (анализ, линейная алгебра)</li>
+      <li>2027: дискретная математика + теория вероятностей</li>
+      <li>2028–2029: теория чисел, криптография, алгоритмы (MIT OCW)</li>
+    </ul>
+    <h4>Физика</h4>
+    <ul>
+      <li>1-й курс: механика + электродинамика</li>
+      <li>2-й курс: квантовая физика + оптика</li>
+      <li>С 2028: MIT OCW 8.01/8.02 + Quantum Computing</li>
+    </ul>
+    <p>Инструменты: MIT OCW, Brilliant.org, Art of Problem Solving.</p>`
+  },
+  {
+    id:'science', num:'05', title:'НАУЧНАЯ ДЕЯТЕЛЬНОСТЬ И РЕКОМЕНДАЦИИ',
+    body:`<ul>
+      <li><b>2026–2027 (1 курс):</b> научный кружок ИКИТ, 1–2 конференции</li>
+      <li><b>2027–2028 (2 курс):</b> публикация в российских журналах (СибФУ, «Безопасность информационных технологий»)</li>
+      <li><b>2028–2029 (3–4 курс):</b> 2–3 международные публикации + сильные научруки</li>
+    </ul>
+    <p>Ежемесячно: собирать идеи для статей (CTF-отчёты, анализ уязвимостей); раз в семестр — запрос рекомендации у научрука.</p>`
+  },
+  {
+    id:'code', num:'06', title:'ПРОГРАММИРОВАНИЕ И ПОРТФОЛИО',
+    body:`<p>Еженедельно 2 часа: LeetCode (Medium+ по security), Codeforces + AtCoder.</p>
+    <h4>Проекты для GitHub</h4>
+    <ul>
+      <li>Простой шифр RSA на Python</li>
+      <li>Sniffer + анализ трафика (Wireshark + Python)</li>
+      <li>Модуль обнаружения DDoS</li>
+      <li>Автоматизация анализа уязвимостей</li>
+    </ul>`
+  },
+  {
+    id:'monthly', num:'07', title:'ЕЖЕМЕСЯЧНЫЙ И НЕДЕЛЬНЫЙ ГРАФИК',
+    body:`<p>1-й понедельник месяца — сдача теста на английский. 1-е число — план на следующий месяц.</p>
+    <table><tr><th>День</th><th>Занятие</th></tr>
+    <tr><td>Понедельник</td><td>2 ч математика + английский speaking</td></tr>
+    <tr><td>Вторник</td><td>2 ч физика/специальность</td></tr>
+    <tr><td>Среда</td><td>1 ч научка + GitHub</td></tr>
+    <tr><td>Четверг</td><td>2 ч английский writing</td></tr>
+    <tr><td>Пятница</td><td>1,5 ч программирование + проекты</td></tr>
+    <tr><td>Суббота</td><td>отдых или лёгкая физика</td></tr>
+    <tr><td>Воскресенье</td><td>обзор недели + планирование</td></tr>
+    </table>`
+  },
+  {
+    id:'semester', num:'08', title:'ПЕРВЫЙ СЕМЕСТР (СЕН–ДЕК 2026)',
+    body:`<div id="week-checklist" class="week-grid"></div>`
+  },
+  {
+    id:'years', num:'09', title:'ПЛАН ПО ГОДАМ',
+    body:`<table>
+    <tr><th>Год</th><th>Курс</th><th>TOEFL</th><th>Матем./физика</th><th>Публикации</th><th>GitHub</th><th>Доп.</th></tr>
+    <tr><td>2026–2027</td><td>1 курс</td><td>95–100</td><td>11 класс + анализ</td><td>1–2</td><td>2–3</td><td>Научный кружок</td></tr>
+    <tr><td>2027–2028</td><td>2–3 курс</td><td>100–105</td><td>Дискретная + квантовая</td><td>2–3</td><td>4–5</td><td>Олимпиады</td></tr>
+    <tr><td>2028–2029</td><td>3–4 курс</td><td>105–110</td><td>Теория чисел + криптография</td><td>3–5</td><td>6–8</td><td>Портфолио для MIT</td></tr>
+    <tr><td>2029–2031</td><td>Специалитет + MIT</td><td>110+</td><td>1-й курс MIT (EECS)</td><td>4–6</td><td>10+</td><td>Защита диплома</td></tr>
+    </table>`
+  },
+  {
+    id:'resources', num:'10', title:'РЕСУРСЫ И КНИГИ',
+    body:`<ul>
+      <li><b>Английский:</b> Oxford Academic English, MIT OCW</li>
+      <li><b>Математика:</b> MIT OCW 6.042J, «Concrete Mathematics»</li>
+      <li><b>Физика:</b> MIT OCW 8.01, «Introduction to Quantum Mechanics»</li>
+      <li><b>Специальность:</b> «Cryptography and Network Security» (Stallings)</li>
+      <li><b>Портфолио:</b> «The Art of Code» (GitHub guides)</li>
+      <li><b>Олимпиады:</b> Russian Olympiad in Informatics, Yandex School of Data Analysis</li>
+    </ul>`
+  },
+  {
+    id:'burnout', num:'11', title:'КАК ИЗБЕЖАТЬ ВЫГОРАНИЯ',
+    body:`<ul>
+      <li>4 дня учёбы, 3 дня отдыха</li>
+      <li>Сон 8 часов</li>
+      <li>1 полный выходной в неделю</li>
+      <li>Вести дневник прогресса</li>
+      <li>Общаться с другими студентами ИКИТ</li>
+    </ul>`
+  },
+  {
+    id:'budget', num:'12', title:'БЮДЖЕТ ВРЕМЕНИ (НА ДЕНЬ)',
+    body:`<ul>
+      <li>2 ч — английский</li>
+      <li>2 ч — математика/физика</li>
+      <li>2 ч — специальность + научка</li>
+      <li>1–1,5 ч — программирование</li>
+    </ul>
+    <p><b>Всего: 7–8,5 часов</b> в день (остальное — сон и хобби)</p>`
+  },
+  {
+    id:'nextsteps', num:'13', title:'СЛЕДУЮЩИЕ 7 ДНЕЙ',
+    body:`<div id="next-checklist"></div>`
+  }
+];
+
+const nextStepsData = [
+  'Пройти бесплатный TOEFL iBT или IELTS (British Council)',
+  'Зарегистрироваться на MIT OCW',
+  'Записаться на научный кружок ИКИТ по информационной безопасности',
+  'Создать GitHub-репозиторий и добавить первый проект',
+  'Определиться с форматом дальнейшего трекинга плана'
+];
+
+const weekData = [
+  {d:'Понедельник', t:'Английский speaking (30 мин) + линейная алгебра (2 ч)'},
+  {d:'Вторник', t:'Физика (2 ч) + криптография (1 ч)'},
+  {d:'Среда', t:'Научный кружок ИКИТ'},
+  {d:'Четверг', t:'Английский writing (30 мин) + чтение статей MIT OCW'},
+  {d:'Пятница', t:'Программирование (2 ч)'},
+  {d:'Суббота', t:'Повторение + CTF (1 ч)'}
+];
+
+/* ---------- render sections ---------- */
+const container = document.getElementById('sections');
+sections.forEach(s=>{
+  const card = document.createElement('section');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="card-num">${s.num}</span>
+      <span class="card-title">${s.title}</span>
+      <span class="chev">▸</span>
+    </div>
+    <div class="card-body"><div class="card-inner">${s.body}</div></div>
+  `;
+  card.querySelector('.card-head').addEventListener('click', ()=>{
+    card.classList.toggle('open');
+  });
+  container.appendChild(card);
+});
+
+/* ---------- next-steps checklist ---------- */
+const nextEl = document.getElementById('next-checklist');
+nextStepsData.forEach((txt,i)=>{
+  const key = 'next-'+i;
+  const row = document.createElement('label');
+  row.className = 'check-item' + (state[key] ? ' checked' : '');
+  row.innerHTML = `<input type="checkbox" ${state[key]?'checked':''}><span>${txt}</span>`;
+  row.querySelector('input').addEventListener('change', e=>{
+    state[key] = e.target.checked;
+    row.classList.toggle('checked', e.target.checked);
+    saveState(state);
+    updateProgress();
+  });
+  nextEl.appendChild(row);
+});
+
+/* ---------- weekly checklist ---------- */
+const weekEl = document.getElementById('week-checklist');
+weekData.forEach((day,i)=>{
+  const key = 'week-'+i;
+  const col = document.createElement('div');
+  col.className = 'day-col';
+  col.innerHTML = `<div class="d-name">${day.d}</div>
+    <label class="check-item ${state[key]?'checked':''}">
+      <input type="checkbox" ${state[key]?'checked':''}><span>${day.t}</span>
+    </label>`;
+  col.querySelector('input').addEventListener('change', e=>{
+    state[key] = e.target.checked;
+    col.querySelector('.check-item').classList.toggle('checked', e.target.checked);
+    saveState(state);
+    updateProgress();
+  });
+  weekEl.appendChild(col);
+});
+
+/* ---------- overall progress (next-steps + weekly = trackable checklist items) ---------- */
+function updateProgress(){
+  const total = nextStepsData.length + weekData.length;
+  let done = 0;
+  nextStepsData.forEach((_,i)=>{ if(state['next-'+i]) done++; });
+  weekData.forEach((_,i)=>{ if(state['week-'+i]) done++; });
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-pct').textContent = pct+'%';
+}
+updateProgress();
+
+/* ---------- trajectory SVG ---------- */
+const traj = [
+  {year:'2026', label:'СТАРТ · ИКИТ', x:60, done:true},
+  {year:'2027', label:'TOEFL ~95-100', x:260},
+  {year:'2028', label:'ПУБЛИКАЦИИ', x:460},
+  {year:'2029', label:'ПОРТФОЛИО', x:660},
+  {year:'2031', label:'MIT', x:800}
+];
+const svg = document.getElementById('traj-svg');
+const midY = 100;
+let pathD = `M ${traj[0].x} ${midY}`;
+traj.forEach((p,i)=>{
+  if(i>0){
+    const prev = traj[i-1];
+    const cx = (prev.x+p.x)/2;
+    pathD += ` Q ${cx} ${midY-30*(i%2===0?1:-1)}, ${p.x} ${midY}`;
+  }
+});
+let svgHTML = `<path class="traj-path" d="${pathD}"></path>`;
+traj.forEach((p,i)=>{
+  const key = 'traj-'+i;
+  const isDone = p.done || state[key];
+  svgHTML += `
+    <g class="node ${isDone?'done':''}" data-key="${key}" transform="translate(${p.x},${midY})">
+      <circle r="7"></circle>
+      <text class="year" x="0" y="-16" text-anchor="middle">${p.year}</text>
+      <text class="label" x="0" y="28" text-anchor="middle">${p.label}</text>
+    </g>`;
+});
+svg.setAttribute('viewBox','0 0 860 160');
+svg.innerHTML = svgHTML;
+svg.querySelectorAll('.node').forEach(node=>{
+  node.addEventListener('click', ()=>{
+    const key = node.getAttribute('data-key');
+    if(key==='traj-0') return; // start is always done
+    state[key] = !state[key];
+    node.classList.toggle('done', !!state[key]);
+    saveState(state);
+  });
+});
+</script>
+</body>
+</html>
