@@ -8,80 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0A2A43;
-    --bg-deep: #071D30;
-    --panel: #0F3B5C;
-    --panel-line: rgba(126,200,227,0.16);
-    --grid: rgba(126,200,227,0.07);
-    --ink: #EAF3F8;
-    --ink-dim: #8FB0C4;
-    --ink-faint: #5A7E93;
-    --cyan: #7EC8E3;
-    --amber: #F2A93B;
-    --done: #6FCF97;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
+    --bg: #04090A; --bg-deep: #030607; --panel: #081412; --panel-line: rgba(0,255,178,0.22);
+    --grid: rgba(0,255,178,0.06); --ink: #D8FFEF; --ink-dim: #7FC9AE; --ink-faint: #3C6B5C;
+    --cyan: #00E5FF; --amber: #FF5FA8; --done: #39FF88; --bad: #FF4655;
+    --mono: 'JetBrains Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:
-      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/40px 40px,
-      var(--bg);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.55;
-    padding-bottom:80px;
-  }
+  body{margin:0;background:linear-gradient(var(--grid) 1px, transparent 1px) 0 0/32px 32px,linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/32px 32px,var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;padding-bottom:80px;position:relative;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:repeating-linear-gradient(180deg, rgba(0,255,178,0.025) 0px, rgba(0,255,178,0.025) 1px, transparent 1px, transparent 3px);}
   a{color:var(--cyan);}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px;}
-
-  /* ---- header / title block ---- */
-  header{
-    border-bottom:1px solid var(--panel-line);
-    padding:28px 0 22px;
-    position:relative;
-  }
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:.18em;
-    color:var(--amber);
-    text-transform:uppercase;
-    display:flex;
-    justify-content:space-between;
-  }
-  h1{
-    font-family:var(--mono);
-    font-weight:800;
-    font-size:clamp(28px,7vw,44px);
-    letter-spacing:.02em;
-    margin:10px 0 6px;
-  }
-  h1 .arrow{color:var(--amber);}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px;}
+  header{border-bottom:1px solid var(--panel-line);padding:28px 0 22px;position:relative;}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;display:flex;justify-content:space-between;text-shadow:0 0 8px rgba(255,95,168,0.5);}
+  h1{font-family:var(--mono);font-weight:800;font-size:clamp(28px,7vw,44px);letter-spacing:.02em;margin:10px 0 6px;color:var(--cyan);text-shadow:0 0 12px rgba(0,229,255,0.45),0 0 2px rgba(0,229,255,0.8);}
+  h1 .arrow{color:var(--amber);text-shadow:0 0 12px rgba(255,95,168,0.6);}
   .subtitle{color:var(--ink-dim);font-size:14px;max-width:560px;}
-  .meta-row{
-    display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;
-  }
-  .meta-chip{
-    font-family:var(--mono);font-size:11px;letter-spacing:.05em;
-    border:1px solid var(--panel-line);padding:6px 10px;color:var(--ink-dim);
-  }
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .meta-chip{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid var(--panel-line);padding:6px 10px;color:var(--ink-dim);}
   .meta-chip b{color:var(--cyan);font-weight:600;}
-
-  /* ---- overall progress ---- */
   .progress-block{margin-top:20px;}
-  .progress-label{
-    font-family:var(--mono);font-size:11px;letter-spacing:.1em;
-    color:var(--ink-dim);display:flex;justify-content:space-between;margin-bottom:6px;
-  }
+  .progress-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-dim);display:flex;justify-content:space-between;margin-bottom:6px;}
   .progress-track{height:8px;background:var(--panel);border:1px solid var(--panel-line);position:relative;}
   .progress-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--amber));width:0%;transition:width .4s ease;}
-
-  /* ---- trajectory chart ---- */
-  .chart-wrap{margin:34px 0 10px;border:1px solid var(--panel-line);background:var(--bg-deep);padding:18px 14px 8px;}
+  .main-nav{display:flex;flex-wrap:wrap;gap:0;margin-top:22px;border:1px solid var(--panel-line);}
+  .main-nav button{flex:1;min-width:110px;background:transparent;border:none;color:var(--ink-dim);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;padding:12px 8px;cursor:pointer;border-right:1px solid var(--panel-line);border-bottom:1px solid var(--panel-line);transition:.15s;}
+  .main-nav button:last-child{border-right:none;}
+  .main-nav button.active{background:var(--panel);color:var(--amber);}
+  .main-nav button:hover:not(.active){background:rgba(126,200,227,0.06);color:var(--ink);}
+  .gx-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:10px 12px;border:1px solid var(--panel-line);background:var(--bg-deep);font-family:var(--mono);font-size:11.5px;}
+  .gx-item{color:var(--ink-dim);white-space:nowrap;}
+  .gx-track{flex:1;min-width:80px;height:6px;background:var(--panel);border:1px solid var(--panel-line);}
+  .gx-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--done));width:0%;transition:width .3s;}
+  .gx-actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+  .gx-actions .btn{padding:6px 10px;font-size:10.5px;}
+  .chart-wrap{margin:22px 0 10px;border:1px solid var(--panel-line);background:var(--bg-deep);padding:18px 14px 8px;}
   .chart-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:10px;}
   svg{width:100%;height:auto;display:block;}
   .node{cursor:pointer;}
@@ -91,15 +52,9 @@
   .node .year{fill:var(--ink-dim);font-size:10px;}
   .node .label{fill:var(--ink);font-size:9.5px;}
   .traj-path{fill:none;stroke:var(--cyan);stroke-width:1.5;stroke-dasharray:4 3;opacity:.55;}
-
-  /* ---- section cards ---- */
-  section.card{
-    margin-top:18px;border:1px solid var(--panel-line);background:rgba(15,59,92,0.35);
-  }
-  .card-head{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    padding:14px 16px;cursor:pointer;user-select:none;
-  }
+  section.card{margin-top:18px;border:1px solid var(--panel-line);background:rgba(0,255,178,0.03);transition:box-shadow .2s,border-color .2s;}
+  section.card:hover{border-color:var(--cyan);box-shadow:0 0 14px rgba(0,229,255,0.12);}
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;cursor:pointer;user-select:none;}
   .card-head:hover{background:rgba(126,200,227,0.05);}
   .card-num{font-family:var(--mono);color:var(--amber);font-size:12px;min-width:26px;}
   .card-title{font-family:var(--mono);font-weight:600;font-size:14.5px;letter-spacing:.02em;flex:1;}
@@ -115,50 +70,128 @@
   .card-inner table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
   .card-inner th,.card-inner td{border:1px solid var(--panel-line);padding:6px 8px;text-align:left;}
   .card-inner th{font-family:var(--mono);color:var(--cyan);font-weight:600;font-size:11px;background:rgba(126,200,227,0.06);}
-
-  /* ---- checklist items ---- */
-  .check-item{
-    display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13.5px;color:var(--ink-dim);
-    border-bottom:1px dashed var(--panel-line);
-  }
+  .check-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13.5px;color:var(--ink-dim);border-bottom:1px dashed var(--panel-line);}
   .check-item:last-child{border-bottom:none;}
   .check-item input{margin-top:3px;accent-color:var(--amber);width:15px;height:15px;flex-shrink:0;cursor:pointer;}
   .check-item.checked span{color:var(--ink-faint);text-decoration:line-through;}
   .check-item span{cursor:pointer;}
-
-  /* ---- dashboard counters ---- */
   .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
   .dash-cell{border:1px solid var(--panel-line);padding:12px;background:var(--bg-deep);}
   .dash-cell .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase;}
   .dash-cell .v-row{display:flex;align-items:center;gap:8px;margin-top:6px;}
-  .dash-cell input[type=number]{
-    width:56px;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);
-    font-family:var(--mono);font-size:16px;padding:4px 6px;
-  }
+  .dash-cell input[type=number]{width:56px;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--mono);font-size:16px;padding:4px 6px;}
   .dash-cell .target{font-family:var(--mono);color:var(--ink-faint);font-size:12px;}
-
-  /* ---- weekly grid ---- */
+  .dash-cell .v-static{font-family:var(--mono);font-size:20px;color:var(--cyan);margin-top:4px;}
   .week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:8px;}
   .day-col{border:1px solid var(--panel-line);padding:10px;background:var(--bg-deep);}
   .day-col .d-name{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
-
-  /* ---- title block footer ---- */
-  .titleblock{
-    margin-top:34px;border:1px solid var(--panel-line);
-    display:grid;grid-template-columns:1fr 1fr;font-family:var(--mono);font-size:11px;
-  }
+  .titleblock{margin-top:34px;border:1px solid var(--panel-line);display:grid;grid-template-columns:1fr 1fr;font-family:var(--mono);font-size:11px;}
   .titleblock div{padding:10px 12px;border-right:1px solid var(--panel-line);border-bottom:1px solid var(--panel-line);}
   .titleblock div:nth-child(2n){border-right:none;}
   .titleblock .tl-label{color:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase;font-size:9.5px;display:block;margin-bottom:4px;}
   .titleblock input{background:transparent;border:none;color:var(--cyan);font-family:var(--mono);font-size:13px;width:100%;outline:none;}
-
   footer{text-align:center;color:var(--ink-faint);font-family:var(--mono);font-size:11px;margin-top:26px;letter-spacing:.05em;}
-
+  .subnav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px;}
+  .subnav button{background:var(--bg-deep);border:1px solid var(--panel-line);color:var(--ink-dim);font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;padding:8px 12px;cursor:pointer;text-transform:uppercase;}
+  .subnav button.active{background:var(--panel);color:var(--amber);border-color:var(--amber);}
+  .subnav.mode-nav button.active{color:var(--cyan);border-color:var(--cyan);}
+  .bank-stats{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 4px;}
+  .fc-wrap{margin-top:16px;}
+  .fc-counter{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-bottom:8px;display:flex;justify-content:space-between;}
+  .flashcard{border:1px solid var(--panel-line);background:var(--bg-deep);min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 20px;cursor:pointer;position:relative;}
+  .flashcard .hint{position:absolute;top:10px;right:14px;font-family:var(--mono);font-size:9.5px;color:var(--ink-faint);letter-spacing:.08em;}
+  .fc-term{font-family:var(--mono);font-size:22px;color:var(--ink);font-weight:700;}
+  .fc-def{font-size:14.5px;color:var(--cyan);margin-top:14px;max-width:520px;}
+  .fc-ex{font-size:12.5px;color:var(--ink-faint);margin-top:10px;font-style:italic;max-width:520px;}
+  .fc-controls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
+  .btn{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);padding:9px 14px;cursor:pointer;transition:.15s;}
+  .btn:hover{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,229,255,0.35);color:var(--cyan);}
+  .btn.good{border-color:var(--done);color:var(--done);}
+  .btn.bad{border-color:var(--bad);color:var(--bad);}
+  .btn.primary{border-color:var(--amber);color:var(--amber);}
+  .quiz-wrap{margin-top:16px;}
+  .quiz-q{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.08em;margin-bottom:6px;text-transform:uppercase;}
+  .quiz-term{font-family:var(--mono);font-size:20px;color:var(--ink);font-weight:700;margin-bottom:16px;}
+  .quiz-opt{display:block;width:100%;text-align:left;background:var(--bg-deep);border:1px solid var(--panel-line);color:var(--ink-dim);padding:12px 14px;margin-bottom:8px;cursor:pointer;font-size:13.5px;font-family:var(--sans);}
+  .quiz-opt:hover:not(.locked){border-color:var(--cyan);}
+  .quiz-opt.correct{border-color:var(--done);color:var(--done);background:rgba(111,207,151,0.08);}
+  .quiz-opt.wrong{border-color:var(--bad);color:var(--bad);background:rgba(232,115,92,0.08);}
+  .quiz-score{font-family:var(--mono);font-size:12px;color:var(--amber);margin-bottom:10px;}
+  .quiz-result{text-align:center;padding:30px 10px;}
+  .quiz-result .big{font-family:var(--mono);font-size:36px;color:var(--amber);}
+  .lab-card{border:1px solid var(--panel-line);background:var(--bg-deep);padding:14px 16px;margin-top:12px;}
+  .lab-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+  .lab-title{font-family:var(--mono);font-size:13.5px;color:var(--ink);font-weight:600;}
+  .badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--panel-line);color:var(--ink-faint);}
+  .badge.easy{color:var(--done);border-color:var(--done);}
+  .badge.mid{color:var(--amber);border-color:var(--amber);}
+  .badge.hard{color:var(--bad);border-color:var(--bad);}
+  .lab-desc{font-size:13.5px;color:var(--ink-dim);margin-top:8px;}
+  .lab-row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;}
+  .lab-row input[type=text]{background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--mono);padding:7px 9px;width:120px;}
+  .lab-result{font-family:var(--mono);font-size:12px;}
+  .lab-result.ok{color:var(--done);}
+  .lab-result.no{color:var(--bad);}
+  .lab-solution{margin-top:10px;padding:10px 12px;background:rgba(126,200,227,0.05);border-left:2px solid var(--cyan);font-size:13px;color:var(--ink-dim);display:none;}
+  .lab-solution.show{display:block;}
+  .ai-check{margin-top:12px;padding-top:12px;border-top:1px dashed var(--panel-line);}
+  .ai-check-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--amber);text-transform:uppercase;margin-bottom:6px;}
+  .ai-textarea{width:100%;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--sans);font-size:13px;padding:8px;resize:vertical;}
+  .ai-result{margin-top:8px;}
+  .ai-feedback{padding:10px 12px;background:rgba(111,207,151,0.06);border-left:2px solid var(--done);font-size:13px;color:var(--ink-dim);}
+  .ai-err{font-family:var(--mono);font-size:12px;color:var(--bad);}
+  .ai-settings input[type=password], .ai-settings input[type=text]{width:100%;max-width:340px;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--mono);font-size:12.5px;padding:8px;margin-top:4px;}
+  .ai-settings label{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.05em;margin-top:12px;}
+  .jchat-log{max-height:420px;overflow-y:auto;border:1px solid var(--panel-line);background:var(--bg-deep);padding:12px;margin-top:10px;display:flex;flex-direction:column;gap:10px;}
+  .jchat-msg{max-width:80%;padding:9px 12px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;}
+  .jchat-msg.user{align-self:flex-end;background:rgba(0,229,255,0.1);border:1px solid var(--cyan);color:var(--ink);}
+  .jchat-msg.assistant{align-self:flex-start;background:rgba(57,255,136,0.06);border:1px solid var(--done);color:var(--ink-dim);}
+  .jchat-msg.err{align-self:center;color:var(--bad);font-family:var(--mono);font-size:12px;}
+  .jchat-row{display:flex;gap:8px;margin-top:10px;align-items:flex-end;}
+  .jchat-row textarea{flex:1;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--sans);font-size:13.5px;padding:8px;resize:vertical;}
+  .lab-done-row{display:flex;align-items:center;gap:8px;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+  .ex-list{margin-top:10px;}
+  .log-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+  .log-form input{background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--mono);padding:7px 9px;}
+  .log-form input[type=date]{width:150px;}
+  .log-form input[type=number]{width:90px;}
+  .log-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px;}
+  .log-table th,.log-table td{border:1px solid var(--panel-line);padding:6px 8px;text-align:left;font-family:var(--mono);}
+  .log-table th{color:var(--cyan);font-size:10.5px;text-transform:uppercase;background:rgba(126,200,227,0.06);}
+  .log-table td.del{cursor:pointer;color:var(--bad);text-align:center;width:30px;}
+  .bar-chart{display:flex;align-items:flex-end;gap:4px;height:90px;margin-top:14px;border-bottom:1px solid var(--panel-line);padding-bottom:2px;}
+  .bar-chart .bar{flex:1;background:linear-gradient(180deg,var(--cyan),var(--amber));min-width:6px;position:relative;}
+  .bar-chart .bar span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--ink-faint);white-space:nowrap;}
+  .macro-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12.5px;color:var(--ink-dim);padding:6px 0;border-bottom:1px dashed var(--panel-line);}
+  .macro-row b{color:var(--cyan);}
+  .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .cal-dow{font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-align:center;padding:4px 0;}
+  .cal-cell{border:1px solid var(--panel-line);min-height:52px;padding:4px;font-family:var(--mono);font-size:11px;color:var(--ink-dim);cursor:pointer;position:relative;}
+  .cal-cell:hover{border-color:var(--cyan);}
+  .cal-cell.today{border-color:var(--amber);}
+  .cal-cell.selected{background:rgba(126,200,227,0.1);border-color:var(--cyan);}
+  .cal-cell.empty{background:transparent;border-color:transparent;cursor:default;}
+  .cal-dot{position:absolute;bottom:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--amber);}
+  .day-tasks{margin-top:14px;border:1px solid var(--panel-line);padding:12px;background:var(--bg-deep);}
+  .task-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;color:var(--ink-dim);}
+  .task-row.done span{text-decoration:line-through;color:var(--ink-faint);}
+  .task-add{display:flex;gap:8px;margin-top:8px;}
+  .task-add input{flex:1;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);padding:7px 9px;font-family:var(--sans);font-size:13px;}
+  .journal-entry{border:1px solid var(--panel-line);padding:10px 12px;margin-top:10px;background:var(--bg-deep);}
+  .journal-entry .j-date{font-family:var(--mono);font-size:10.5px;color:var(--amber);}
+  .journal-entry .j-text{font-size:13.5px;color:var(--ink-dim);margin-top:4px;white-space:pre-wrap;}
+  .journal-form textarea{width:100%;background:var(--panel);border:1px solid var(--panel-line);color:var(--ink);font-family:var(--sans);padding:8px;font-size:13.5px;min-height:70px;margin-top:8px;}
+  .ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px;}
+  .ach-card{border:1px solid var(--panel-line);padding:12px;background:var(--bg-deep);opacity:.4;}
+  .ach-card.unlocked{opacity:1;border-color:var(--amber);}
+  .ach-title{font-family:var(--mono);font-size:12.5px;color:var(--ink);font-weight:600;}
+  .ach-desc{font-size:12px;color:var(--ink-faint);margin-top:4px;}
+  .forecast-note{font-family:var(--mono);font-size:11.5px;color:var(--cyan);margin-top:8px;}
   ::selection{background:var(--amber);color:var(--bg-deep);}
 </style>
 </head>
 <body>
-
 <div class="wrap">
 
   <header>
@@ -171,301 +204,416 @@
       <div class="meta-chip">TOEFL ЦЕЛЬ <b>100–110</b></div>
     </div>
     <div class="progress-block">
-      <div class="progress-label"><span>ОБЩИЙ ПРОГРЕСС ПО ЗАДАЧАМ</span><span id="progress-pct">0%</span></div>
+      <div class="progress-label"><span>ОБЩИЙ ПРОГРЕСС ПО ЗАДАЧАМ (УЧЁБА)</span><span id="progress-pct">0%</span></div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="gx-bar">
+      <span class="gx-item" id="gx-level">Уровень 1</span>
+      <div class="gx-track"><div class="gx-fill" id="gx-fill"></div></div>
+      <span class="gx-item" id="gx-xp">0 XP</span>
+      <span class="gx-item">🔥 <span id="gx-streak">0 дн. подряд</span></span>
+      <div class="gx-actions">
+        <button class="btn" id="export-btn">Экспорт данных</button>
+        <label class="btn" style="cursor:pointer;">Импорт<input type="file" id="import-input" accept="application/json" style="display:none"></label>
+      </div>
+    </div>
+    <div class="main-nav">
+      <button id="nav-plan" class="active">01 · Учёба</button>
+      <button id="nav-bank">02 · Банк знаний</button>
+      <button id="nav-fitness">03 · Форма и бег</button>
+      <button id="nav-planner">04 · Дневник и календарь</button>
+      <button id="nav-progress">05 · Прогресс и достижения</button>
+      <button id="nav-jarvis">06 · Джарвис</button>
     </div>
   </header>
 
-  <div class="chart-wrap">
-    <div class="chart-title">Траектория · 2026 → 2031</div>
-    <svg id="traj-svg" viewBox="0 0 860 200"></svg>
-  </div>
-
-  <div class="chart-wrap">
-    <div class="chart-title">Текущие показатели</div>
-    <div class="dash-grid">
-      <div class="dash-cell">
-        <div class="k">TOEFL (текущий)</div>
-        <div class="v-row"><input type="number" id="d-toefl" min="0" max="120" value="0"><span class="target">/ 110</span></div>
+  <div id="view-plan">
+    <div class="chart-wrap">
+      <div class="chart-title">Траектория · 2026 → 2031</div>
+      <svg id="traj-svg" viewBox="0 0 860 160"></svg>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Текущие показатели</div>
+      <div class="dash-grid">
+        <div class="dash-cell"><div class="k">TOEFL (текущий)</div><div class="v-row"><input type="number" id="d-toefl" min="0" max="120" value="0"><span class="target">/ 110</span></div></div>
+        <div class="dash-cell"><div class="k">Публикации</div><div class="v-row"><input type="number" id="d-pubs" min="0" value="0"><span class="target">/ 6</span></div></div>
+        <div class="dash-cell"><div class="k">GitHub проекты</div><div class="v-row"><input type="number" id="d-github" min="0" value="0"><span class="target">/ 10</span></div></div>
+        <div class="dash-cell"><div class="k">Рекомендации</div><div class="v-row"><input type="number" id="d-recs" min="0" value="0"><span class="target">/ 4</span></div></div>
       </div>
-      <div class="dash-cell">
-        <div class="k">Публикации</div>
-        <div class="v-row"><input type="number" id="d-pubs" min="0" value="0"><span class="target">/ 6</span></div>
-      </div>
-      <div class="dash-cell">
-        <div class="k">GitHub проекты</div>
-        <div class="v-row"><input type="number" id="d-github" min="0" value="0"><span class="target">/ 10</span></div>
-      </div>
-      <div class="dash-cell">
-        <div class="k">Рекомендации</div>
-        <div class="v-row"><input type="number" id="d-recs" min="0" value="0"><span class="target">/ 4</span></div>
-      </div>
+    </div>
+    <div id="sections"></div>
+    <div class="titleblock">
+      <div><span class="tl-label">Автор траектории</span><input id="tb-name" placeholder="твоё имя"></div>
+      <div><span class="tl-label">Специальность</span><input value="10.05.01 Компьютерная безопасность" readonly></div>
+      <div><span class="tl-label">Вуз</span><input value="ИКИТ СФУ" readonly></div>
+      <div><span class="tl-label">Цель</span><input value="MIT — EECS / Sloan" readonly></div>
     </div>
   </div>
 
-  <div id="sections"></div>
-
-  <div class="titleblock">
-    <div><span class="tl-label">Автор траектории</span><input id="tb-name" placeholder="твоё имя"></div>
-    <div><span class="tl-label">Специальность</span><input value="10.05.01 Компьютерная безопасность" readonly></div>
-    <div><span class="tl-label">Вуз</span><input value="ИКИТ СФУ" readonly></div>
-    <div><span class="tl-label">Цель</span><input value="MIT — EECS / Sloan" readonly></div>
+  <div id="view-bank" style="display:none">
+    <div class="chart-wrap">
+      <div class="chart-title">Банк знаний</div>
+      <div class="subnav" id="cat-nav">
+        <button data-cat="english" class="active">Английский</button>
+        <button data-cat="mathphys">Математика / Физика</button>
+        <button data-cat="security">Security / крипто / CTF</button>
+        <button data-cat="all">Все вместе</button>
+      </div>
+      <div class="subnav mode-nav" id="mode-nav">
+        <button data-mode="cards" class="active">Карточки</button>
+        <button data-mode="quiz">Тест</button>
+        <button data-mode="labs">Лабораторные</button>
+      </div>
+      <div class="bank-stats">
+        <div class="meta-chip">ИЗУЧЕНО КАРТОЧЕК <b id="stat-known">0/0</b></div>
+        <div class="meta-chip">ЛУЧШИЙ ТЕСТ <b id="stat-quiz">—</b></div>
+        <div class="meta-chip">ЛАБОРАТОРНЫХ ВЫПОЛНЕНО <b id="stat-labs">0/0</b></div>
+      </div>
+    </div>
+    <div id="bank-content"></div>
   </div>
 
-  <footer>ПРОГРЕСС СОХРАНЯЕТСЯ ЛОКАЛЬНО В БРАУЗЕРЕ · ПОСЛЕ РАЗМЕЩЕНИЯ НА GITHUB PAGES ДАННЫЕ БУДУТ СОХРАНЯТЬСЯ МЕЖДУ ВИЗИТАМИ</footer>
+  <div id="view-fitness" style="display:none">
+    <div class="chart-wrap">
+      <div class="chart-title">Текущие показатели</div>
+      <div class="dash-grid">
+        <div class="dash-cell"><div class="k">Рост, см</div><div class="v-row"><input type="number" id="f-height" min="0" value="189"></div></div>
+        <div class="dash-cell"><div class="k">Текущий вес, кг</div><div class="v-row"><input type="number" id="f-weight" min="0" step="0.1" value="65"></div></div>
+        <div class="dash-cell"><div class="k">Тренировок в неделю</div><div class="v-row"><input type="number" id="f-sessions" min="0" max="14" value="0"></div></div>
+        <div class="dash-cell"><div class="k">Белок в день (расчёт)</div><div class="v-static" id="f-protein">—</div></div>
+      </div>
+      <div class="meta-row" style="margin-top:14px">
+        <div class="meta-chip">ЦЕЛЬ 6 МЕС <b>+3–4 кг</b></div>
+        <div class="meta-chip">ЦЕЛЬ 12 МЕС <b>+5–6 кг</b></div>
+        <div class="meta-chip">ЦЕЛЬ 18 МЕС <b>+6–7 кг</b></div>
+      </div>
+    </div>
+    <div id="sections-fit"></div>
+    <div class="chart-wrap">
+      <div class="chart-title">Дневник веса</div>
+      <p style="color:var(--ink-dim);font-size:13px;">Добавляй вес раз в 1–2 недели, чтобы видеть реальную траекторию набора массы.</p>
+      <div class="log-form">
+        <input type="date" id="wlog-date">
+        <input type="number" id="wlog-val" step="0.1" placeholder="кг">
+        <button class="btn primary" id="wlog-add">Добавить запись</button>
+      </div>
+      <div id="wlog-chart"></div>
+      <div id="wlog-table"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Журнал бега</div>
+      <p style="color:var(--ink-dim);font-size:13px;">Целевой объём: 40–55 км/нед (к 2027–2028 — 60 км+).</p>
+      <div class="log-form">
+        <input type="date" id="rlog-date">
+        <input type="number" id="rlog-val" step="0.1" placeholder="км за неделю">
+        <button class="btn primary" id="rlog-add">Добавить запись</button>
+      </div>
+      <div id="rlog-chart"></div>
+      <div id="rlog-table"></div>
+    </div>
+  </div>
+
+  <div id="view-planner" style="display:none">
+    <div class="chart-wrap">
+      <div class="chart-title">Календарь</div>
+      <div class="cal-head">
+        <button class="btn" id="cal-prev">← Пред.</button>
+        <span id="cal-label" style="font-family:var(--mono);font-size:13px;color:var(--ink);"></span>
+        <button class="btn" id="cal-next">След. →</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="day-tasks" id="day-tasks"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Дневник</div>
+      <div class="journal-form">
+        <textarea id="journal-text" placeholder="Как прошёл день? Что получилось, что нет..."></textarea>
+        <button class="btn primary" id="journal-add-btn" style="margin-top:8px;">Добавить запись</button>
+      </div>
+      <div id="journal-list"></div>
+    </div>
+  </div>
+
+  <div id="view-progress" style="display:none">
+    <div class="chart-wrap">
+      <div class="chart-title">Сводка</div>
+      <div class="meta-row">
+        <div class="meta-chip" id="pg-level">Уровень 1</div>
+        <div class="meta-chip" id="pg-xp">0 XP</div>
+        <div class="meta-chip" id="pg-streak">0 дней подряд</div>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Банк знаний — прогресс по карточкам</div>
+      <div id="pg-flashcards"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">История тестов</div>
+      <div id="pg-quiz"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Тренировки на этой неделе</div>
+      <div id="pg-split-rate" style="font-family:var(--mono);color:var(--cyan);font-size:13px;"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Тренд веса и прогноз</div>
+      <div id="pg-weight-trend"></div>
+      <div class="forecast-note" id="pg-weight-forecast"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Достижения</div>
+      <div class="ach-grid" id="pg-achievements"></div>
+    </div>
+    <div class="chart-wrap ai-settings">
+      <div class="chart-title">Настройки ИИ-проверки (для лабораторных и эссе)</div>
+      <p style="color:var(--ink-dim);font-size:13px;">Внутри Claude (в этом чате и в предпросмотре артефактов) развёрнутая проверка ИИ работает сразу, без ключа. Если сайт открыт отдельно — например, размещён на GitHub Pages — вставь сюда свой Anthropic API-ключ (создаётся на console.anthropic.com). Ключ хранится только в твоём браузере (localStorage) и отправляется напрямую в Anthropic, больше никуда. Не публикуй его в репозитории и не используй эту функцию на чужих устройствах.</p>
+      <label>Anthropic API-ключ<input type="password" id="ai-key-input" placeholder="sk-ant-..."></label>
+      <label>Модель (необязательно, по умолчанию claude-sonnet-5)<input type="text" id="ai-model-input" placeholder="claude-sonnet-5"></label>
+      <button class="btn primary" id="ai-settings-save" style="margin-top:12px;">Сохранить</button>
+      <span class="ai-err" id="ai-settings-status" style="margin-left:10px;"></span>
+    </div>
+  </div>
+
+  <div id="view-jarvis" style="display:none">
+    <div class="chart-wrap ai-settings">
+      <div class="chart-title">Подключение Джарвиса</div>
+      <p style="color:var(--ink-dim);font-size:13px;">Режим 1 (рекомендуется) — стучимся напрямую в твой задеплоенный Jarvis (Go-бэкенд, CORS у него уже открыт): полноценный агент с памятью, инструментами и характером. Режим 2 — запасной, напрямую в Groq/DeepSeek с твоим ключом, без памяти и инструментов, на случай если бэкенд не поднят.</p>
+      <div class="subnav" id="jarvis-mode-nav">
+        <button data-mode="backend" class="active">Мой Jarvis (URL)</button>
+        <button data-mode="direct">Напрямую Groq/DeepSeek</button>
+      </div>
+      <div id="jarvis-settings-backend">
+        <label>URL твоего Jarvis (например https://jarvis-production.up.railway.app)<input type="text" id="jarvis-url-input" placeholder="https://..."></label>
+      </div>
+      <div id="jarvis-settings-direct" style="display:none">
+        <label>Groq API-ключ<input type="password" id="jarvis-groq-key" placeholder="gsk_..."></label>
+        <label>DeepSeek API-ключ (опционально, фолбэк)<input type="password" id="jarvis-deepseek-key" placeholder="sk-..."></label>
+      </div>
+      <button class="btn primary" id="jarvis-settings-save" style="margin-top:12px;">Сохранить</button>
+      <span class="ai-err" id="jarvis-settings-status" style="margin-left:10px;"></span>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Чат</div>
+      <div id="jchat-log" class="jchat-log"></div>
+      <div class="jchat-row">
+        <textarea id="jchat-input" rows="2" placeholder="Сообщение Джарвису..."></textarea>
+        <button class="btn primary" id="jchat-send">Отправить</button>
+      </div>
+      <div id="jchat-status" class="ai-err"></div>
+      <button class="btn" id="jchat-clear" style="margin-top:10px;">Очистить историю чата</button>
+    </div>
+  </div>
+
+  <footer>ПРОГРЕСС СОХРАНЯЕТСЯ ЛОКАЛЬНО В БРАУЗЕРЕ · ИСПОЛЬЗУЙ ЭКСПОРТ/ИМПОРТ ДЛЯ ПЕРЕНОСА МЕЖДУ УСТРОЙСТВАМИ</footer>
 </div>
 
 <script>
-/* ---------- storage (localStorage with in-memory fallback) ---------- */
+/* ================= storage ================= */
 const memStore = {};
 const storage = {
   get(k){ try{ return localStorage.getItem(k); }catch(e){ return memStore[k] ?? null; } },
   set(k,v){ try{ localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
 };
-function loadState(){
-  try{ return JSON.parse(storage.get('mit-trajectory-state') || '{}'); }catch(e){ return {}; }
-}
-function saveState(state){
-  storage.set('mit-trajectory-state', JSON.stringify(state));
-}
+function loadState(){ try{ return JSON.parse(storage.get('mit-trajectory-state') || '{}'); }catch(e){ return {}; } }
+function saveState(s){ storage.set('mit-trajectory-state', JSON.stringify(s)); }
 let state = loadState();
 
 document.getElementById('today').textContent = new Date().toLocaleDateString('ru-RU',{year:'numeric',month:'long',day:'numeric'});
 
-/* ---------- dashboard counters ---------- */
-const dashIds = ['d-toefl','d-pubs','d-github','d-recs'];
-dashIds.forEach(id=>{
-  const el = document.getElementById(id);
-  el.value = state[id] ?? 0;
-  el.addEventListener('input', ()=>{ state[id] = el.value; saveState(state); });
+/* ================= gamification core ================= */
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function markActivity(){
+  const d = todayISO();
+  if(!state['activity-'+d]) state['activity-'+d]=true;
+  saveState(state);
+  updateGamification();
+}
+function currentStreak(){
+  let streak=0; let d=new Date();
+  while(true){
+    const iso = d.toISOString().slice(0,10);
+    if(state['activity-'+iso]){ streak++; d.setDate(d.getDate()-1); } else break;
+    if(streak>3650) break;
+  }
+  return streak;
+}
+function computeXP(){
+  let xp=0;
+  Object.keys(state).forEach(k=>{
+    if(/^(next-|week-|split-|recovery-|traj-)/.test(k) && state[k]===true) xp+=10;
+  });
+  ['english','mathphys','security'].forEach(cat=>{
+    const known = state['fc-known-'+cat]||{};
+    xp += Object.values(known).filter(Boolean).length*5;
+  });
+  ['english','mathphys','security','all'].forEach(cat=>{
+    const best = state['quiz-best-'+cat];
+    if(best) xp += best*3;
+  });
+  Object.keys(state).forEach(k=>{ if(k.startsWith('lab-done-') && state[k]) xp+=20; });
+  xp += (state['weight-log']||[]).length*5;
+  xp += (state['run-log']||[]).length*5;
+  xp += (state['journal']||[]).length*8;
+  return xp;
+}
+function levelFromXP(xp){ return Math.floor(xp/150)+1; }
+function updateGamification(){
+  const xp = computeXP();
+  const level = levelFromXP(xp);
+  const into = xp-(level-1)*150;
+  const pct = Math.round((into/150)*100);
+  document.getElementById('gx-level').textContent = 'Уровень '+level;
+  document.getElementById('gx-xp').textContent = xp+' XP';
+  document.getElementById('gx-fill').style.width = pct+'%';
+  document.getElementById('gx-streak').textContent = currentStreak()+' дн. подряд';
+  const pg = document.getElementById('view-progress');
+  if(pg && pg.style.display!=='none') renderProgress();
+}
+
+const ACHIEVEMENTS = [
+  {title:'Первый шаг', desc:'Выполни любую первую задачу', check:(xp)=>xp>0},
+  {title:'Неделя дисциплины', desc:'7 дней подряд активности', check:(xp,streak)=>streak>=7},
+  {title:'Месяц без пропусков', desc:'30 дней подряд активности', check:(xp,streak)=>streak>=30},
+  {title:'100 карточек', desc:'Выучи 100 карточек суммарно', check:()=>{let s=0;['english','mathphys','security'].forEach(c=>{const k=state['fc-known-'+c]||{};s+=Object.values(k).filter(Boolean).length;});return s>=100;}},
+  {title:'Отличник', desc:'Пройди тест на 10/10', check:()=>['english','mathphys','security','all'].some(c=>state['quiz-best-'+c]===10)},
+  {title:'Первая лаба', desc:'Заверши любую лабораторную', check:()=>Object.keys(state).some(k=>k.startsWith('lab-done-')&&state[k])},
+  {title:'Пять лабораторных', desc:'Заверши 5 лабораторных', check:()=>Object.keys(state).filter(k=>k.startsWith('lab-done-')&&state[k]).length>=5},
+  {title:'Марафонец', desc:'Суммарно 100+ км в журнале бега', check:()=>(state['run-log']||[]).reduce((a,e)=>a+e.val,0)>=100},
+  {title:'Дневник героя', desc:'10 записей в дневнике', check:()=>(state['journal']||[]).length>=10},
+  {title:'Уровень 5', desc:'Достигни 5 уровня', check:(xp)=>levelFromXP(xp)>=5}
+];
+
+/* ================= export / import ================= */
+document.getElementById('export-btn').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download='trajectory-backup-'+todayISO()+'.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+document.getElementById('import-input').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const imported = JSON.parse(reader.result);
+      if(confirm('Импортировать данные? Текущий прогресс в этом браузере будет заменён.')){
+        state = imported;
+        saveState(state);
+        location.reload();
+      }
+    }catch(err){ alert('Не удалось прочитать файл — это должен быть JSON-бэкап из этого приложения.'); }
+  };
+  reader.readAsText(file);
 });
 
-/* ---------- title block name ---------- */
+/* ================= dashboard counters ================= */
+['d-toefl','d-pubs','d-github','d-recs'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.value = state[id] ?? 0;
+  el.addEventListener('input', ()=>{ state[id]=el.value; saveState(state); markActivity(); });
+});
 const nameEl = document.getElementById('tb-name');
 nameEl.value = state['tb-name'] || '';
-nameEl.addEventListener('input', ()=>{ state['tb-name'] = nameEl.value; saveState(state); });
+nameEl.addEventListener('input', ()=>{ state['tb-name']=nameEl.value; saveState(state); });
 
-/* ---------- content data ---------- */
+/* ================= top nav ================= */
+const VIEWS = ['plan','bank','fitness','planner','progress','jarvis'];
+function switchView(target){
+  VIEWS.forEach(v=>{
+    document.getElementById('view-'+v).style.display = (v===target)?'block':'none';
+    document.getElementById('nav-'+v).classList.toggle('active', v===target);
+  });
+  if(target==='bank') renderBank();
+  if(target==='fitness') renderFitness();
+  if(target==='planner') renderPlanner();
+  if(target==='progress') renderProgress();
+  if(target==='jarvis') renderJarvisView();
+}
+VIEWS.forEach(v=>document.getElementById('nav-'+v).addEventListener('click', ()=>switchView(v)));
+
+/* ================= plan content ================= */
 const sections = [
-  {
-    id:'intro', num:'01', title:'ВВЕДЕНИЕ',
-    body:`<p>Обучение в ИКИТ СФУ по специальности «Компьютерная безопасность» начинается в сентябре 2026. За 5,5 лет — параллельно основной программе — идёт подготовка к поступлению в MIT (EECS или Sloan).</p>
-    <h4>MIT требует</h4>
-    <ul>
-      <li>TOEFL 100–110 (академический английский)</li>
-      <li>Математику: линейная алгебра, дискретная математика, теория чисел, анализ</li>
-      <li>Физику: квантовая механика, оптика, механика</li>
-      <li>Научные рекомендации и публикации</li>
-      <li>Портфолио на GitHub</li>
-    </ul>
-    <p>Проходной балл ИКИТ по специалитету ≈ 263. Для не носителей языка MIT: TOEFL min 100, рекомендуется 100+.</p>`
-  },
-  {
-    id:'goals', num:'02', title:'ОБЩИЕ ЦЕЛИ К 2031 ГОДУ',
-    body:`<ul>
-      <li>TOEFL iBT: 105–110 (25–30 в каждом разделе)</li>
-      <li>Математика на уровне 1-го курса MIT (6.042 + 6.043) + алгоритмы и криптография</li>
-      <li>Физика на уровне 1-го курса MIT + квантовая механика</li>
-      <li>Публикации: минимум 4–6 (2–3 российские + 2–3 международные)</li>
-      <li>Рекомендации: 3–4 от научруков ИКИТ + 1–2 международные</li>
-      <li>GitHub: 5–7 проектов по безопасности (CTF, криптография, анализ сетей)</li>
-      <li>GPA в вузе: 4.5+</li>
-    </ul>`
-  },
-  {
-    id:'english', num:'03', title:'АНГЛИЙСКИЙ (ПРИОРИТЕТ №1)',
-    body:`<h4>Целевые даты TOEFL</h4>
-    <ul>
-      <li>Май 2027 — TOEFL ≈ 95–100</li>
-      <li>Май 2028 — TOEFL 100–105</li>
-      <li>Май 2029 — TOEFL 105–110</li>
-    </ul>
-    <h4>Ежедневный режим (2–2,5 ч)</h4>
-    <ul>
-      <li>40 мин — speaking (запись себя, MIT pronunciation guide)</li>
-      <li>40 мин — writing (эссе TOEFL/IELTS)</li>
-      <li>30 мин — reading (научные статьи MIT OCW)</li>
-      <li>30 мин — listening (подкасты MIT + TED + MIT Tech Talks)</li>
-      <li>20 мин — vocabulary (5–10 слов в день по IT/security)</li>
-    </ul>
-    <h4>Инструменты</h4>
-    <p>Duolingo/Babbel, British Council/ETS (тест каждые 3 мес.), YouTube «MIT OCW lectures», трекер в Notion/Excel.</p>`
-  },
-  {
-    id:'mathphys', num:'04', title:'МАТЕМАТИКА И ФИЗИКА',
-    body:`<h4>Математика (ежедневно 2–2,5 ч)</h4>
-    <ul>
-      <li>Сентябрь–декабрь 2026: углубление 11 класса (анализ, линейная алгебра)</li>
-      <li>2027: дискретная математика + теория вероятностей</li>
-      <li>2028–2029: теория чисел, криптография, алгоритмы (MIT OCW)</li>
-    </ul>
-    <h4>Физика</h4>
-    <ul>
-      <li>1-й курс: механика + электродинамика</li>
-      <li>2-й курс: квантовая физика + оптика</li>
-      <li>С 2028: MIT OCW 8.01/8.02 + Quantum Computing</li>
-    </ul>
-    <p>Инструменты: MIT OCW, Brilliant.org, Art of Problem Solving.</p>`
-  },
-  {
-    id:'science', num:'05', title:'НАУЧНАЯ ДЕЯТЕЛЬНОСТЬ И РЕКОМЕНДАЦИИ',
-    body:`<ul>
-      <li><b>2026–2027 (1 курс):</b> научный кружок ИКИТ, 1–2 конференции</li>
-      <li><b>2027–2028 (2 курс):</b> публикация в российских журналах (СибФУ, «Безопасность информационных технологий»)</li>
-      <li><b>2028–2029 (3–4 курс):</b> 2–3 международные публикации + сильные научруки</li>
-    </ul>
-    <p>Ежемесячно: собирать идеи для статей (CTF-отчёты, анализ уязвимостей); раз в семестр — запрос рекомендации у научрука.</p>`
-  },
-  {
-    id:'code', num:'06', title:'ПРОГРАММИРОВАНИЕ И ПОРТФОЛИО',
-    body:`<p>Еженедельно 2 часа: LeetCode (Medium+ по security), Codeforces + AtCoder.</p>
-    <h4>Проекты для GitHub</h4>
-    <ul>
-      <li>Простой шифр RSA на Python</li>
-      <li>Sniffer + анализ трафика (Wireshark + Python)</li>
-      <li>Модуль обнаружения DDoS</li>
-      <li>Автоматизация анализа уязвимостей</li>
-    </ul>`
-  },
-  {
-    id:'monthly', num:'07', title:'ЕЖЕМЕСЯЧНЫЙ И НЕДЕЛЬНЫЙ ГРАФИК',
-    body:`<p>1-й понедельник месяца — сдача теста на английский. 1-е число — план на следующий месяц.</p>
-    <table><tr><th>День</th><th>Занятие</th></tr>
-    <tr><td>Понедельник</td><td>2 ч математика + английский speaking</td></tr>
-    <tr><td>Вторник</td><td>2 ч физика/специальность</td></tr>
-    <tr><td>Среда</td><td>1 ч научка + GitHub</td></tr>
-    <tr><td>Четверг</td><td>2 ч английский writing</td></tr>
-    <tr><td>Пятница</td><td>1,5 ч программирование + проекты</td></tr>
-    <tr><td>Суббота</td><td>отдых или лёгкая физика</td></tr>
-    <tr><td>Воскресенье</td><td>обзор недели + планирование</td></tr>
-    </table>`
-  },
-  {
-    id:'semester', num:'08', title:'ПЕРВЫЙ СЕМЕСТР (СЕН–ДЕК 2026)',
-    body:`<div id="week-checklist" class="week-grid"></div>`
-  },
-  {
-    id:'years', num:'09', title:'ПЛАН ПО ГОДАМ',
-    body:`<table>
-    <tr><th>Год</th><th>Курс</th><th>TOEFL</th><th>Матем./физика</th><th>Публикации</th><th>GitHub</th><th>Доп.</th></tr>
-    <tr><td>2026–2027</td><td>1 курс</td><td>95–100</td><td>11 класс + анализ</td><td>1–2</td><td>2–3</td><td>Научный кружок</td></tr>
-    <tr><td>2027–2028</td><td>2–3 курс</td><td>100–105</td><td>Дискретная + квантовая</td><td>2–3</td><td>4–5</td><td>Олимпиады</td></tr>
-    <tr><td>2028–2029</td><td>3–4 курс</td><td>105–110</td><td>Теория чисел + криптография</td><td>3–5</td><td>6–8</td><td>Портфолио для MIT</td></tr>
-    <tr><td>2029–2031</td><td>Специалитет + MIT</td><td>110+</td><td>1-й курс MIT (EECS)</td><td>4–6</td><td>10+</td><td>Защита диплома</td></tr>
-    </table>`
-  },
-  {
-    id:'resources', num:'10', title:'РЕСУРСЫ И КНИГИ',
-    body:`<ul>
-      <li><b>Английский:</b> Oxford Academic English, MIT OCW</li>
-      <li><b>Математика:</b> MIT OCW 6.042J, «Concrete Mathematics»</li>
-      <li><b>Физика:</b> MIT OCW 8.01, «Introduction to Quantum Mechanics»</li>
-      <li><b>Специальность:</b> «Cryptography and Network Security» (Stallings)</li>
-      <li><b>Портфолио:</b> «The Art of Code» (GitHub guides)</li>
-      <li><b>Олимпиады:</b> Russian Olympiad in Informatics, Yandex School of Data Analysis</li>
-    </ul>`
-  },
-  {
-    id:'burnout', num:'11', title:'КАК ИЗБЕЖАТЬ ВЫГОРАНИЯ',
-    body:`<ul>
-      <li>4 дня учёбы, 3 дня отдыха</li>
-      <li>Сон 8 часов</li>
-      <li>1 полный выходной в неделю</li>
-      <li>Вести дневник прогресса</li>
-      <li>Общаться с другими студентами ИКИТ</li>
-    </ul>`
-  },
-  {
-    id:'budget', num:'12', title:'БЮДЖЕТ ВРЕМЕНИ (НА ДЕНЬ)',
-    body:`<ul>
-      <li>2 ч — английский</li>
-      <li>2 ч — математика/физика</li>
-      <li>2 ч — специальность + научка</li>
-      <li>1–1,5 ч — программирование</li>
-    </ul>
-    <p><b>Всего: 7–8,5 часов</b> в день (остальное — сон и хобби)</p>`
-  },
-  {
-    id:'nextsteps', num:'13', title:'СЛЕДУЮЩИЕ 7 ДНЕЙ',
-    body:`<div id="next-checklist"></div>`
-  }
+  {id:'intro', num:'01', title:'ВВЕДЕНИЕ', body:'<p>Обучение в ИКИТ СФУ по специальности «Компьютерная безопасность» начинается в сентябре 2026. За 5,5 лет — параллельно основной программе — идёт подготовка к поступлению в MIT (EECS или Sloan).</p><h4>MIT требует</h4><ul><li>TOEFL 100–110</li><li>Математику: линейная алгебра, дискретная математика, теория чисел, анализ</li><li>Физику: квантовая механика, оптика, механика</li><li>Научные рекомендации и публикации</li><li>Портфолио на GitHub</li></ul>'},
+  {id:'goals', num:'02', title:'ОБЩИЕ ЦЕЛИ К 2031 ГОДУ', body:'<ul><li>TOEFL iBT: 105–110</li><li>Математика на уровне 1-го курса MIT + алгоритмы и криптография</li><li>Физика на уровне 1-го курса MIT + квантовая механика</li><li>Публикации: 4–6</li><li>Рекомендации: 3–4 + 1–2 международные</li><li>GitHub: 5–7 проектов</li><li>GPA: 4.5+</li></ul>'},
+  {id:'english', num:'03', title:'АНГЛИЙСКИЙ (ПРИОРИТЕТ №1)', body:'<h4>Целевые даты TOEFL</h4><ul><li>Май 2027 — ≈95–100</li><li>Май 2028 — 100–105</li><li>Май 2029 — 105–110</li></ul>'+
+  '<h4>Структура экзамена TOEFL iBT</h4><ul>'+
+  '<li><b>Reading (35 мин)</b> — 2 академических текста, вопросы на детали, вывод, структуру аргумента и словарь в контексте. Тренировка: читать по 1 научной статье в день, выписывать незнакомые слова.</li>'+
+  '<li><b>Listening (36 мин)</b> — лекции и диалоги, вопросы на общий смысл и детали. Тренировка: слушать без субтитров, конспектировать только ключевые слова, потом восстанавливать по памяти.</li>'+
+  '<li><b>Speaking (16 мин)</b> — 4 задания: личное мнение (15 сек на подготовку, 45 сек ответ) + 3 интегрированных (чтение/прослушивание + ответ). Тренировка: засекать таймер, записывать себя, переслушивать на предмет пауз-хезитаций «эм», «а».</li>'+
+  '<li><b>Writing (29 мин)</b> — Integrated (читать+слушать+писать, 20 мин, 150–225 слов) и Academic Discussion (10 мин, 100+ слов). Тренировка: банк готовых связок (however, moreover, this suggests that...).</li>'+
+  '</ul>'+
+  '<h4>Ежедневно (2–2,5 ч)</h4><ul><li>40 мин speaking</li><li>40 мин writing</li><li>30 мин reading</li><li>30 мин listening</li><li>20 мин vocabulary</li></ul>'+
+  '<h4>Произношение и беглость речи</h4><ul>'+
+  '<li>Shadowing: повторяй за диктором TED/MIT lecture с задержкой в 2–3 слова, стараясь копировать интонацию</li>'+
+  '<li>Минимальные пары для русскоговорящих: ship/sheep, thin/sin, work/walk — 10 мин в неделю на артикуляцию</li>'+
+  '<li>Записывай себя раз в неделю на один и тот же текст — так слышен реальный прогресс беглости</li>'+
+  '</ul>'+
+  '<h4>Примерные темы для эссе (ротация по неделям)</h4><ul>'+
+  '<li>Technology makes people more isolated, not less</li>'+
+  '<li>University should focus on practical skills rather than theory</li>'+
+  '<li>Governments should invest more in space exploration</li>'+
+  '<li>Working from home is better than working in an office</li>'+
+  '<li>Artificial intelligence will do more harm than good</li>'+
+  '</ul>'+
+  '<p>Практика слов, эссе и развёрнутая ИИ-проверка — во вкладке «Банк знаний» → «Лабораторные».</p>'},
+  {id:'mathphys', num:'04', title:'МАТЕМАТИКА И ФИЗИКА', body:'<h4>Математика</h4><ul><li>Сен–дек 2026: 11 класс</li><li>2027: дискретная математика + вероятность</li><li>2028–2029: теория чисел, криптография, алгоритмы</li></ul><h4>Физика</h4><ul><li>1 курс: механика + электродинамика</li><li>2 курс: квантовая физика + оптика</li></ul><p>Задачи — во вкладке «Банк знаний».</p>'},
+  {id:'science', num:'05', title:'НАУЧНАЯ ДЕЯТЕЛЬНОСТЬ И РЕКОМЕНДАЦИИ', body:'<ul><li><b>2026–2027:</b> научный кружок, 1–2 конференции</li><li><b>2027–2028:</b> публикация в российских журналах</li><li><b>2028–2029:</b> 2–3 международные публикации</li></ul>'},
+  {id:'code', num:'06', title:'ПРОГРАММИРОВАНИЕ И ПОРТФОЛИО', body:'<p>Еженедельно: LeetCode, Codeforces + AtCoder.</p><h4>Проекты</h4><ul><li>RSA на Python</li><li>Sniffer + анализ трафика</li><li>Модуль обнаружения DDoS</li><li>Автоматизация анализа уязвимостей</li></ul>'},
+  {id:'monthly', num:'07', title:'ЕЖЕМЕСЯЧНЫЙ И НЕДЕЛЬНЫЙ ГРАФИК', body:'<table><tr><th>День</th><th>Занятие</th></tr><tr><td>Пн</td><td>математика + speaking</td></tr><tr><td>Вт</td><td>физика/специальность</td></tr><tr><td>Ср</td><td>научка + GitHub</td></tr><tr><td>Чт</td><td>writing</td></tr><tr><td>Пт</td><td>программирование</td></tr><tr><td>Сб</td><td>отдых / лёгкая физика</td></tr><tr><td>Вс</td><td>обзор недели</td></tr></table>'},
+  {id:'semester', num:'08', title:'ПЕРВЫЙ СЕМЕСТР (СЕН–ДЕК 2026)', body:'<div id="week-checklist" class="week-grid"></div>'},
+  {id:'years', num:'09', title:'ПЛАН ПО ГОДАМ', body:'<table><tr><th>Год</th><th>Курс</th><th>TOEFL</th><th>Матем./физика</th><th>Публикации</th><th>GitHub</th><th>Доп.</th></tr><tr><td>2026–2027</td><td>1 курс</td><td>95–100</td><td>11 класс + анализ</td><td>1–2</td><td>2–3</td><td>Научный кружок</td></tr><tr><td>2027–2028</td><td>2–3 курс</td><td>100–105</td><td>Дискретная + квантовая</td><td>2–3</td><td>4–5</td><td>Олимпиады</td></tr><tr><td>2028–2029</td><td>3–4 курс</td><td>105–110</td><td>Теория чисел + криптография</td><td>3–5</td><td>6–8</td><td>Портфолио</td></tr><tr><td>2029–2031</td><td>Специалитет + MIT</td><td>110+</td><td>1 курс MIT</td><td>4–6</td><td>10+</td><td>Защита диплома</td></tr></table>'},
+  {id:'resources', num:'10', title:'РЕСУРСЫ И КНИГИ', body:'<ul><li>Oxford Academic English, MIT OCW</li><li>MIT OCW 6.042J, «Concrete Mathematics»</li><li>MIT OCW 8.01, «Introduction to Quantum Mechanics»</li><li>«Cryptography and Network Security» (Stallings)</li><li>Russian Olympiad in Informatics, ШАД</li></ul>'},
+  {id:'burnout', num:'11', title:'КАК ИЗБЕЖАТЬ ВЫГОРАНИЯ', body:'<ul><li>4 дня учёбы, 3 дня отдыха</li><li>Сон 8 часов</li><li>1 полный выходной</li><li>Дневник прогресса</li><li>Общение с сокурсниками</li></ul>'},
+  {id:'budget', num:'12', title:'БЮДЖЕТ ВРЕМЕНИ (НА ДЕНЬ)', body:'<ul><li>2 ч английский</li><li>2 ч математика/физика</li><li>2 ч специальность + научка</li><li>1–1,5 ч программирование</li></ul><p><b>Всего: 7–8,5 часов</b></p>'},
+  {id:'nextsteps', num:'13', title:'СЛЕДУЮЩИЕ 7 ДНЕЙ', body:'<div id="next-checklist"></div>'}
 ];
-
-const nextStepsData = [
-  'Пройти бесплатный TOEFL iBT или IELTS (British Council)',
-  'Зарегистрироваться на MIT OCW',
-  'Записаться на научный кружок ИКИТ по информационной безопасности',
-  'Создать GitHub-репозиторий и добавить первый проект',
-  'Определиться с форматом дальнейшего трекинга плана'
-];
-
+const nextStepsData = ['Пройти бесплатный TOEFL iBT или IELTS','Зарегистрироваться на MIT OCW','Записаться на научный кружок ИКИТ','Создать GitHub-репозиторий и первый проект','Пройти первую карточную сессию и тест в «Банке знаний»'];
 const weekData = [
   {d:'Понедельник', t:'Английский speaking (30 мин) + линейная алгебра (2 ч)'},
   {d:'Вторник', t:'Физика (2 ч) + криптография (1 ч)'},
   {d:'Среда', t:'Научный кружок ИКИТ'},
-  {d:'Четверг', t:'Английский writing (30 мин) + чтение статей MIT OCW'},
+  {d:'Четверг', t:'Английский writing (30 мин) + чтение MIT OCW'},
   {d:'Пятница', t:'Программирование (2 ч)'},
   {d:'Суббота', t:'Повторение + CTF (1 ч)'}
 ];
-
-/* ---------- render sections ---------- */
 const container = document.getElementById('sections');
 sections.forEach(s=>{
   const card = document.createElement('section');
   card.className = 'card';
-  card.innerHTML = `
-    <div class="card-head">
-      <span class="card-num">${s.num}</span>
-      <span class="card-title">${s.title}</span>
-      <span class="chev">▸</span>
-    </div>
-    <div class="card-body"><div class="card-inner">${s.body}</div></div>
-  `;
-  card.querySelector('.card-head').addEventListener('click', ()=>{
-    card.classList.toggle('open');
-  });
+  card.innerHTML = '<div class="card-head"><span class="card-num">'+s.num+'</span><span class="card-title">'+s.title+'</span><span class="chev">▸</span></div><div class="card-body"><div class="card-inner">'+s.body+'</div></div>';
+  card.querySelector('.card-head').addEventListener('click', ()=>card.classList.toggle('open'));
   container.appendChild(card);
 });
-
-/* ---------- next-steps checklist ---------- */
 const nextEl = document.getElementById('next-checklist');
 nextStepsData.forEach((txt,i)=>{
   const key = 'next-'+i;
   const row = document.createElement('label');
   row.className = 'check-item' + (state[key] ? ' checked' : '');
-  row.innerHTML = `<input type="checkbox" ${state[key]?'checked':''}><span>${txt}</span>`;
+  row.innerHTML = '<input type="checkbox" '+(state[key]?'checked':'')+'><span>'+txt+'</span>';
   row.querySelector('input').addEventListener('change', e=>{
-    state[key] = e.target.checked;
-    row.classList.toggle('checked', e.target.checked);
-    saveState(state);
-    updateProgress();
+    state[key]=e.target.checked; row.classList.toggle('checked', e.target.checked);
+    saveState(state); updateProgress(); markActivity();
   });
   nextEl.appendChild(row);
 });
-
-/* ---------- weekly checklist ---------- */
 const weekEl = document.getElementById('week-checklist');
 weekData.forEach((day,i)=>{
   const key = 'week-'+i;
   const col = document.createElement('div');
   col.className = 'day-col';
-  col.innerHTML = `<div class="d-name">${day.d}</div>
-    <label class="check-item ${state[key]?'checked':''}">
-      <input type="checkbox" ${state[key]?'checked':''}><span>${day.t}</span>
-    </label>`;
+  col.innerHTML = '<div class="d-name">'+day.d+'</div><label class="check-item '+(state[key]?'checked':'')+'"><input type="checkbox" '+(state[key]?'checked':'')+'><span>'+day.t+'</span></label>';
   col.querySelector('input').addEventListener('change', e=>{
-    state[key] = e.target.checked;
-    col.querySelector('.check-item').classList.toggle('checked', e.target.checked);
-    saveState(state);
-    updateProgress();
+    state[key]=e.target.checked; col.querySelector('.check-item').classList.toggle('checked', e.target.checked);
+    saveState(state); updateProgress(); markActivity();
   });
   weekEl.appendChild(col);
 });
-
-/* ---------- overall progress (next-steps + weekly = trackable checklist items) ---------- */
 function updateProgress(){
   const total = nextStepsData.length + weekData.length;
-  let done = 0;
+  let done=0;
   nextStepsData.forEach((_,i)=>{ if(state['next-'+i]) done++; });
   weekData.forEach((_,i)=>{ if(state['week-'+i]) done++; });
   const pct = Math.round((done/total)*100);
@@ -474,7 +622,6 @@ function updateProgress(){
 }
 updateProgress();
 
-/* ---------- trajectory SVG ---------- */
 const traj = [
   {year:'2026', label:'СТАРТ · ИКИТ', x:60, done:true},
   {year:'2027', label:'TOEFL ~95-100', x:260},
@@ -484,36 +631,888 @@ const traj = [
 ];
 const svg = document.getElementById('traj-svg');
 const midY = 100;
-let pathD = `M ${traj[0].x} ${midY}`;
+let pathD = 'M ' + traj[0].x + ' ' + midY;
 traj.forEach((p,i)=>{
-  if(i>0){
-    const prev = traj[i-1];
-    const cx = (prev.x+p.x)/2;
-    pathD += ` Q ${cx} ${midY-30*(i%2===0?1:-1)}, ${p.x} ${midY}`;
-  }
+  if(i>0){ const prev=traj[i-1]; const cx=(prev.x+p.x)/2; pathD += ' Q ' + cx + ' ' + (midY-30*(i%2===0?1:-1)) + ', ' + p.x + ' ' + midY; }
 });
-let svgHTML = `<path class="traj-path" d="${pathD}"></path>`;
+let svgHTML = '<path class="traj-path" d="'+pathD+'"></path>';
 traj.forEach((p,i)=>{
-  const key = 'traj-'+i;
-  const isDone = p.done || state[key];
-  svgHTML += `
-    <g class="node ${isDone?'done':''}" data-key="${key}" transform="translate(${p.x},${midY})">
-      <circle r="7"></circle>
-      <text class="year" x="0" y="-16" text-anchor="middle">${p.year}</text>
-      <text class="label" x="0" y="28" text-anchor="middle">${p.label}</text>
-    </g>`;
+  const key='traj-'+i; const isDone = p.done || state[key];
+  svgHTML += '<g class="node '+(isDone?'done':'')+'" data-key="'+key+'" transform="translate('+p.x+','+midY+')"><circle r="7"></circle><text class="year" x="0" y="-16" text-anchor="middle">'+p.year+'</text><text class="label" x="0" y="28" text-anchor="middle">'+p.label+'</text></g>';
 });
-svg.setAttribute('viewBox','0 0 860 160');
 svg.innerHTML = svgHTML;
 svg.querySelectorAll('.node').forEach(node=>{
   node.addEventListener('click', ()=>{
     const key = node.getAttribute('data-key');
-    if(key==='traj-0') return; // start is always done
-    state[key] = !state[key];
-    node.classList.toggle('done', !!state[key]);
-    saveState(state);
+    if(key==='traj-0') return;
+    state[key]=!state[key]; node.classList.toggle('done', !!state[key]);
+    saveState(state); markActivity();
   });
 });
+
+/* ================= BANK DATA ================= */
+const BANKS = { english:[], mathphys:[], security:[] };
+BANKS.english = [
+{t:"mitigate",d:"смягчать, снижать (риск, ущерб)",ex:"The patch mitigates the vulnerability found last week."},
+{t:"vulnerability",d:"уязвимость (в системе, протоколе)",ex:"Researchers disclosed a critical vulnerability in the library."},
+{t:"encryption",d:"шифрование",ex:"All traffic is protected with end-to-end encryption."},
+{t:"plausible",d:"правдоподобный, вероятный",ex:"That explanation sounds plausible given the evidence."},
+{t:"redundant",d:"избыточный, дублирующий",ex:"The system keeps a redundant copy of every backup."},
+{t:"inference",d:"вывод, умозаключение",ex:"The report draws a reasonable inference from limited data."},
+{t:"robust",d:"устойчивый, надёжный",ex:"They built a robust authentication mechanism."},
+{t:"exploit",d:"эксплойт; использовать уязвимость",ex:"An attacker could exploit this flaw remotely."},
+{t:"malicious",d:"вредоносный, злонамеренный",ex:"The email carried a malicious attachment."},
+{t:"ambiguous",d:"неоднозначный",ex:"The instructions were ambiguous about the deadline."},
+{t:"corroborate",d:"подтверждать (данными)",ex:"Server logs corroborate the timestamp of the intrusion."},
+{t:"discrepancy",d:"несоответствие, расхождение",ex:"There is a discrepancy between the two reports."},
+{t:"feasible",d:"осуществимый, реализуемый",ex:"A brute force attack is not feasible against a long key."},
+{t:"rigorous",d:"строгий, тщательный",ex:"The proof requires a rigorous mathematical argument."},
+{t:"empirical",d:"эмпирический, основанный на опыте",ex:"The claim is supported by empirical evidence."},
+{t:"hypothesis",d:"гипотеза",ex:"The team tested their hypothesis with a controlled experiment."},
+{t:"adversary",d:"противник (в модели угроз)",ex:"The protocol assumes an active network adversary."},
+{t:"anomaly",d:"аномалия, отклонение",ex:"The monitoring tool flagged an anomaly in traffic volume."},
+{t:"integrity",d:"целостность (данных)",ex:"A checksum verifies the integrity of the file."},
+{t:"confidentiality",d:"конфиденциальность",ex:"Encryption preserves the confidentiality of the message."},
+{t:"authenticate",d:"аутентифицировать, проверять подлинность",ex:"Users must authenticate with a second factor."},
+{t:"countermeasure",d:"контрмера, защитная мера",ex:"Rate limiting is an effective countermeasure against brute force."},
+{t:"breach",d:"взлом, утечка данных",ex:"The company disclosed a data breach affecting millions."},
+{t:"deprecated",d:"устаревший, выведенный из употребления",ex:"This cipher suite is deprecated and should not be used."},
+{t:"scalable",d:"масштабируемый",ex:"The architecture needs to remain scalable under load."},
+{t:"arbitrary",d:"произвольный",ex:"The bug allows arbitrary code execution."},
+{t:"heuristic",d:"эвристический, приближённый",ex:"The antivirus relies partly on heuristic detection."},
+{t:"paradigm",d:"парадигма",ex:"Zero trust is a shift in the security paradigm."},
+{t:"underlying",d:"лежащий в основе",ex:"The underlying protocol has not changed."},
+{t:"comprehensive",d:"всеобъемлющий, исчерпывающий",ex:"They performed a comprehensive audit of the codebase."},
+{t:"subsequent",d:"последующий",ex:"Subsequent tests confirmed the initial finding."},
+{t:"inherent",d:"присущий, неотъемлемый",ex:"There is an inherent trade-off between speed and security."},
+{t:"discern",d:"различать, распознавать",ex:"It is hard to discern signal from noise in the logs."},
+{t:"converge",d:"сходиться",ex:"The algorithm converges after a few iterations."},
+{t:"tangible",d:"осязаемый, конкретный",ex:"The training produced tangible improvements in scores."},
+{t:"resilient",d:"устойчивый к сбоям/атакам",ex:"The network was designed to stay resilient during outages."},
+{t:"circumvent",d:"обходить (защиту, ограничение)",ex:"The exploit circumvents the input validation."},
+{t:"proprietary",d:"патентованный, частный (о ПО)",ex:"The vendor uses a proprietary encryption format."},
+{t:"viable",d:"жизнеспособный, реализуемый",ex:"Passkeys are a viable alternative to passwords."},
+{t:"substantiate",d:"обосновывать, подтверждать фактами",ex:"The claim needs more data to be substantiated."},
+{t:"elicit",d:"выявлять, вызывать (реакцию, ответ)",ex:"The survey was designed to elicit honest feedback."},
+{t:"juxtapose",d:"сопоставлять, противопоставлять",ex:"The paper juxtaposes two competing security models."},
+{t:"discrete",d:"дискретный, отдельный",ex:"Discrete mathematics underlies most cryptographic algorithms."},
+{t:"prevalent",d:"распространённый, преобладающий",ex:"Phishing remains the most prevalent attack vector."},
+{t:"infer",d:"делать вывод",ex:"We can infer the attacker's intent from the payload structure."},
+{t:"expedite",d:"ускорять",ex:"Automation helps expedite the incident response process."},
+{t:"delineate",d:"очерчивать, чётко определять границы",ex:"The policy delineates who can access production systems."},
+{t:"indispensable",d:"незаменимый, необходимый",ex:"Logging is indispensable for post-incident analysis."},
+{t:"meticulous",d:"дотошный, скрупулёзный",ex:"The audit required a meticulous review of every access log."},
+{t:"ubiquitous",d:"вездесущий, повсеместный",ex:"IoT devices have become ubiquitous, expanding the attack surface."},
+{t:"innate",d:"врождённый, присущий изначально",ex:"There is no innate security in an unpatched system."},
+{t:"volatile",d:"неустойчивый, изменчивый; временный (напр. volatile memory)",ex:"Forensic teams try to capture volatile memory before shutdown."},
+{t:"latent",d:"скрытый, латентный",ex:"The vulnerability remained latent for years before discovery."},
+{t:"preemptive",d:"упреждающий, превентивный",ex:"They took preemptive measures to patch the flaw before disclosure."},
+{t:"forensic",d:"криминалистический (напр. digital forensics)",ex:"A forensic analysis traced the breach to a compromised laptop."},
+{t:"obfuscate",d:"запутывать, скрывать смысл (напр. кода)",ex:"Malware authors obfuscate code to evade detection."},
+{t:"traverse",d:"пересекать, обходить (напр. каталоги)",ex:"A path traversal bug let attackers traverse outside the web root."},
+{t:"footprint",d:"след, отпечаток (напр. digital footprint)",ex:"Minimizing your digital footprint reduces exposure to attacks."},
+{t:"exfiltrate",d:"похищать, выводить данные из системы",ex:"The malware was designed to exfiltrate credentials silently."}
+];
+BANKS.mathphys = [
+{t:"Определитель 2×2",d:"det(A) = ad − bc для матрицы [[a,b],[c,d]]"},
+{t:"Собственные значения",d:"λ, для которых Av = λv при некотором ненулевом v"},
+{t:"Малая теорема Ферма",d:"если p простое и gcd(a,p)=1, то a^(p−1) ≡ 1 (mod p)"},
+{t:"Функция Эйлера φ(n)",d:"количество чисел от 1 до n, взаимно простых с n"},
+{t:"Теорема Эйлера",d:"если gcd(a,n)=1, то a^φ(n) ≡ 1 (mod n) — основа RSA"},
+{t:"Алгоритм Евклида",d:"нахождение НОД(a,b) через последовательные остатки от деления"},
+{t:"Быстрое возведение в степень",d:"вычисление a^b mod n за O(log b) через возведение в квадрат"},
+{t:"RSA: шифрование",d:"c = m^e mod n, расшифровка m = c^d mod n"},
+{t:"Дискретный логарифм",d:"задача найти x из a^x ≡ b (mod p) — сложна вычислительно"},
+{t:"Число сочетаний C(n,k)",d:"C(n,k) = n! / (k!(n−k)!) — число способов выбрать k из n"},
+{t:"Формула объединения событий",d:"P(A∪B) = P(A) + P(B) − P(A∩B)"},
+{t:"Формула Байеса",d:"P(A|B) = P(B|A)·P(A) / P(B)"},
+{t:"Линейная независимость",d:"векторы независимы, если ни один нельзя выразить через остальные"},
+{t:"Ранг матрицы",d:"число линейно независимых строк (или столбцов) матрицы"},
+{t:"Математическая индукция",d:"метод доказательства: база + переход от n к n+1"},
+{t:"Степень вершины графа",d:"число рёбер, инцидентных данной вершине"},
+{t:"Второй закон Ньютона",d:"F = m·a — сила равна массе, умноженной на ускорение"},
+{t:"Закон сохранения энергии",d:"полная энергия замкнутой системы постоянна"},
+{t:"Уравнение Шрёдингера",d:"описывает эволюцию волновой функции квантовой системы во времени"},
+{t:"Принцип неопределённости",d:"Δx·Δp ≥ ħ/2 — нельзя точно знать координату и импульс одновременно"},
+{t:"Закон Кулона",d:"F = k·q1·q2 / r² — сила взаимодействия точечных зарядов"},
+{t:"Энтропия Шеннона",d:"H(X) = −Σ p(x)·log2 p(x) — мера неопределённости источника"},
+{t:"Нотация Big-O",d:"верхняя асимптотическая оценка роста времени/памяти алгоритма"},
+{t:"NP-полнота",d:"класс задач без известного полиномиального решения, но с быстрой проверкой"},
+{t:"Хеш-функция: свойства",d:"стойкость к коллизиям, лавинный эффект, необратимость"},
+{t:"Симметричное шифрование",d:"один ключ для шифрования и расшифровки (напр. AES)"},
+{t:"Асимметричное шифрование",d:"разные ключи: открытый и закрытый (напр. RSA)"},
+{t:"Обмен ключами Диффи–Хеллмана",d:"получение общего секретного ключа по открытому каналу"},
+{t:"Решето Эратосфена",d:"алгоритм нахождения всех простых чисел до N"},
+{t:"Закон Ома",d:"U = I·R — напряжение равно силе тока, умноженной на сопротивление"},
+{t:"Кинетическая энергия",d:"Ek = m·v² / 2"},
+{t:"Потенциальная энергия",d:"Ep = m·g·h"},
+{t:"Скалярное произведение",d:"a·b = |a|·|b|·cos θ"},
+{t:"Векторное произведение",d:"a×b — вектор, перпендикулярный обоим, |a×b| = |a|·|b|·sin θ"},
+{t:"Модель Марковской цепи",d:"процесс, где следующее состояние зависит только от текущего"},
+{t:"Теорема Пифагора",d:"a² + b² = c² для прямоугольного треугольника"},
+{t:"Дискриминант",d:"D = b² − 4ac для уравнения ax²+bx+c=0; корни x=(−b±√D)/2a"},
+{t:"Логарифм",d:"loga(b) = c означает, что a^c = b"},
+{t:"Производная степенной функции",d:"(x^n)' = n·x^(n−1)"},
+{t:"Интеграл степенной функции",d:"∫x^n dx = x^(n+1)/(n+1) + C"},
+{t:"Закон всемирного тяготения",d:"F = G·m1·m2 / r²"},
+{t:"Уравнение равноускоренного движения",d:"v = v0 + a·t"},
+{t:"Импульс тела",d:"p = m·v"},
+{t:"Первый закон термодинамики",d:"ΔU = Q − A (изменение энергии = теплота минус работа)"},
+{t:"Период и частота колебаний",d:"f = 1/T"},
+{t:"Длина волны",d:"λ = v/f"},
+{t:"Генерация ключей RSA",d:"выбрать простые p,q → n=pq → φ(n)=(p−1)(q−1) → выбрать e → найти d = e⁻¹ mod φ(n)"},
+{t:"XOR-шифрование",d:"свойство a⊕a=0; лежит в основе одноразового блокнота"},
+{t:"One-time pad",d:"теоретически невзламываемый шифр при полностью случайном ключе длины сообщения"},
+{t:"Путь и цикл в графе",d:"путь — последовательность рёбер без повторов вершин; цикл — путь, возвращающийся в начало"},
+{t:"Матрица смежности",d:"квадратная матрица, где элемент [i][j] показывает наличие ребра между вершинами i и j"},
+{t:"Независимые события",d:"P(A∩B) = P(A)·P(B), если события независимы"},
+{t:"Стандартное отклонение",d:"σ = √(Σ(x−μ)²/n) — мера разброса данных"},
+{t:"Двоичная система счисления",d:"позиционная система с основанием 2, использует цифры 0 и 1"},
+{t:"Модульная арифметика",d:"a mod n — остаток от деления a на n; основа многих криптоалгоритмов"}
+];
+BANKS.security = [
+{t:"CTF",d:"Capture The Flag — соревнование по поиску уязвимостей и «флагов»"},
+{t:"SQL injection",d:"внедрение вредоносного SQL-кода через непроверенный ввод"},
+{t:"XSS",d:"Cross-Site Scripting — внедрение скрипта в чужую веб-страницу"},
+{t:"Buffer overflow",d:"переполнение буфера — запись данных за границы выделенной памяти"},
+{t:"Man-in-the-middle",d:"перехват канала связи между сторонами злоумышленником"},
+{t:"Zero-day",d:"уязвимость, о которой ещё не знает производитель и нет патча"},
+{t:"Phishing",d:"обман для получения учётных данных под видом доверенного источника"},
+{t:"DDoS",d:"распределённая атака на отказ в обслуживании с множества источников"},
+{t:"Firewall",d:"межсетевой экран — фильтрация трафика по правилам"},
+{t:"IDS/IPS",d:"система обнаружения/предотвращения вторжений"},
+{t:"Salt",d:"случайная добавка к паролю перед хешированием против rainbow table"},
+{t:"Rainbow table",d:"предвычисленная таблица хешей для быстрого подбора паролей"},
+{t:"Brute force",d:"перебор всех возможных вариантов пароля или ключа"},
+{t:"Privilege escalation",d:"повышение привилегий — получение больших прав, чем положено"},
+{t:"Reverse engineering",d:"анализ программы без исходного кода"},
+{t:"Sandbox",d:"изолированная среда для безопасного запуска подозрительного кода"},
+{t:"Honeypot",d:"ловушка — имитация уязвимой системы для изучения атакующих"},
+{t:"Payload",d:"полезная нагрузка — часть эксплойта, выполняющая вредоносное действие"},
+{t:"Shellcode",d:"машинный код, запускаемый эксплойтом для получения доступа"},
+{t:"CVE",d:"Common Vulnerabilities and Exposures — идентификатор уязвимости"},
+{t:"Penetration testing",d:"санкционированная имитация атаки для оценки защиты"},
+{t:"Social engineering",d:"манипуляция людьми для получения доступа"},
+{t:"Two-factor authentication",d:"подтверждение личности двумя независимыми способами"},
+{t:"VPN",d:"зашифрованный туннель поверх публичной сети"},
+{t:"TLS/SSL",d:"протоколы шифрования соединения между клиентом и сервером"},
+{t:"Certificate authority",d:"удостоверяющий центр — выдаёт цифровые сертификаты доверия"},
+{t:"Digital signature",d:"подтверждает автора и целостность сообщения"},
+{t:"Nonce",d:"одноразовое число для защиты от повторной атаки"},
+{t:"Hash collision",d:"два разных входа дают одинаковый хеш"},
+{t:"Port scanning",d:"поиск открытых сетевых сервисов"},
+{t:"Wireshark",d:"инструмент перехвата и анализа сетевых пакетов"},
+{t:"Metasploit",d:"фреймворк для разработки и запуска эксплойтов"},
+{t:"OWASP Top 10",d:"список самых критичных уязвимостей веб-приложений"},
+{t:"Steganography",d:"сокрытие данных внутри другого файла (напр. изображения)"},
+{t:"Rootkit",d:"вредоносное ПО, скрывающее своё присутствие в системе"},
+{t:"Path traversal",d:"выход за пределы разрешённой директории через '../' в пути"},
+{t:"Command injection",d:"внедрение и выполнение системных команд через непроверенный ввод"},
+{t:"CSRF",d:"Cross-Site Request Forgery — принуждение браузера жертвы выполнить нежелательный запрос"},
+{t:"Directory listing",d:"случайное раскрытие содержимого директории веб-сервера"},
+{t:"Session hijacking",d:"перехват и использование чужой сессии пользователя"},
+{t:"Session token",d:"уникальный идентификатор, подтверждающий активную сессию"},
+{t:"API key",d:"секретный ключ для аутентификации запросов к API"},
+{t:"Принцип наименьших привилегий",d:"пользователь/процесс должен иметь только минимально необходимый доступ"},
+{t:"Defense in depth",d:"эшелонированная защита — несколько независимых уровней безопасности"},
+{t:"Threat model",d:"модель угроз — систематический анализ возможных атак на систему"},
+{t:"Attack surface",d:"совокупность всех точек, через которые возможна атака на систему"},
+{t:"Kill chain",d:"последовательность этапов кибератаки от разведки до достижения цели"},
+{t:"Incident response",d:"реагирование на инцидент — процесс обнаружения и устранения атаки"},
+{t:"SIEM",d:"система сбора и корреляции событий безопасности в реальном времени"},
+{t:"Air gap",d:"физическая изоляция сети от других сетей, включая интернет"},
+{t:"Supply chain attack",d:"атака через компрометацию доверенного поставщика ПО или оборудования"},
+{t:"Insider threat",d:"угроза со стороны сотрудника с легитимным доступом"},
+{t:"Fuzzing",d:"автоматическая подача случайных/некорректных данных для поиска багов"},
+{t:"SAST/DAST",d:"статический и динамический анализ кода на уязвимости"},
+{t:"Bug bounty",d:"программа вознаграждения за найденные уязвимости"}
+];
+const CATLABELS = {english:'Английский', mathphys:'Математика/Физика', security:'Security/крипто/CTF', all:'Все вместе'};
+function bankFor(cat){ if(cat==='all') return [].concat(BANKS.english, BANKS.mathphys, BANKS.security); return BANKS[cat]; }
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+/* ================= LABS DATA ================= */
+const LABS = {
+english:[
+{id:'en1',title:'TOEFL Independent Writing',diff:'mid',desc:'За 25 минут напиши эссе (250–300 слов) на тему: «Do you agree or disagree: studying abroad is more valuable than studying at home?» Проверь структуру, связки, разнообразие лексики.',type:'checklist',aiCheck:true,aiCriteria:'Это TOEFL Independent Writing (250–300 слов, 25 минут). Оцени по официальным критериям TOEFL Writing: Task Response, Organization, Language Use (грамматика, лексика, связки). Дай оценку по шкале TOEFL 0–5 (с шагом 0.5) и переведи её в примерный балл по шкале 0–30.'},
+{id:'en2',title:'TOEFL Speaking Task 1',diff:'easy',desc:'Запиши 45-секундный ответ на вопрос: «Describe a skill that is important to learn. Explain why.» Расшифруй свой ответ в текст и вставь ниже для проверки.',type:'checklist',aiCheck:true,aiCriteria:'Это расшифровка 45-секундного устного ответа TOEFL Speaking Task 1. Оцени по критериям TOEFL Speaking: Delivery (заметно ли по тексту, что структура рваная), Language Use, Topic Development. Дай оценку 0–4 по шкале TOEFL Speaking.'},
+{id:'en3',title:'Academic summary',diff:'mid',desc:'Прочитай abstract одной лекции MIT OCW по своей специальности и перескажи своими словами за 1 минуту. Вставь свой пересказ текстом ниже.',type:'checklist',aiCheck:true,aiCriteria:'Это пересказ academic abstract своими словами. Проверь: не скопирован ли текст дословно (перефраз), сохранена ли основная мысль, нет ли фактических искажений, качество академического английского.'},
+{id:'en4',title:'Technical vocabulary drill',diff:'easy',desc:'Составь 10 предложений, используя по одному слову из банка «Английский» в каждом — в контексте информационной безопасности.',type:'checklist',aiCheck:true,aiCriteria:'Проверь 10 предложений: правильно ли использовано целевое слово по смыслу, грамматическая корректность, уместность контекста информационной безопасности. Укажи предложения с ошибками и как их исправить.'},
+{id:'en5',title:'TOEFL Listening note-taking',diff:'hard',desc:'Прослушай лекцию MIT OCW (10+ минут) один раз, ведя конспект ключевых слов, затем восстанови по нему основные тезисы текстом.',type:'checklist',aiCheck:true,aiCriteria:'Это восстановленный по конспекту пересказ лекции. Проверь связность, полноту (есть ли явные пробелы в логике), академический стиль изложения.'}
+],
+mathphys:[
+{id:'mp1',title:'НОД по алгоритму Евклида',diff:'easy',desc:'Найди НОД(252, 105).',type:'numeric',answer:'21'},
+{id:'mp2',title:'Малая теорема Ферма',diff:'mid',desc:'Вычисли 7^13 mod 11, используя малую теорему Ферма.',type:'numeric',answer:'2'},
+{id:'mp3',title:'Число сочетаний',diff:'easy',desc:'Сколькими способами можно выбрать 3 элемента из 10 (C(10,3))?',type:'numeric',answer:'120'},
+{id:'mp4',title:'Функция Эйлера',diff:'mid',desc:'Вычисли φ(36).',type:'numeric',answer:'12'},
+{id:'mp5',title:'Второй закон Ньютона',diff:'easy',desc:'Тело массой 2 кг разгоняется с ускорением 3 м/с². Найди силу F (Н).',type:'numeric',answer:'6'},
+{id:'mp6',title:'Кинетическая энергия',diff:'easy',desc:'Найди кинетическую энергию тела массой 4 кг при скорости 5 м/с (Дж).',type:'numeric',answer:'50'},
+{id:'mp7',title:'Закон Ома',diff:'easy',desc:'Через резистор 5 Ом течёт ток 2 А. Найди напряжение (В).',type:'numeric',answer:'10'},
+{id:'mp8',title:'RSA вручную (мини-пример)',diff:'hard',desc:'Дано p=5, q=11, e=3. Найди n, φ(n) и закрытый показатель d. Распиши полный ход решения ниже для проверки.',type:'reveal',solution:'n=55, φ(n)=40. 3·d≡1(mod 40) → d=27 (3·27=81=2·40+1).',aiCheck:true,aiCriteria:'Проверь полный ход решения задачи RSA (p=5, q=11, e=3, найти n, φ(n), d). Правильный ответ: n=55, φ(n)=40, d=27. Проверь не только финальные числа, но и корректность каждого шага рассуждения.'},
+{id:'mp9',title:'Матрица: определитель',diff:'mid',desc:'Найди определитель матрицы [[4,7],[2,6]].',type:'numeric',answer:'10'},
+{id:'mp10',title:'Дискретная вероятность',diff:'hard',desc:'В урне 5 красных и 3 синих шара. Вероятность вытащить подряд два красных без возврата? Распиши ход решения ниже для проверки.',type:'reveal',solution:'P = (5/8)·(4/7) = 5/14 ≈ 0.357.',aiCheck:true,aiCriteria:'Проверь ход решения задачи на вероятность (5 красных, 3 синих шара, без возврата, вытянуть 2 красных подряд). Правильный ответ: P=(5/8)·(4/7)=5/14≈0.357. Проверь корректность рассуждения, а не только финальное число.'},
+{id:'mp11',title:'Теорема Пифагора',diff:'easy',desc:'Катеты треугольника 6 и 8. Найди гипотенузу.',type:'numeric',answer:'10'},
+{id:'mp12',title:'Дискриминант',diff:'mid',desc:'Найди дискриминант уравнения x²−5x+6=0.',type:'numeric',answer:'1'}
+],
+security:[
+{id:'sec1',title:'Caesar cipher на Python',diff:'easy',desc:'Напиши функцию encode(text, shift) и decode(text, shift) для шифра Цезаря. Проверь на строке ATTACK AT DAWN со сдвигом 3. Вставь свой код ниже для проверки.',type:'reveal',solution:'def encode(t,s):\n    r=""\n    for c in t:\n        if c.isalpha():\n            base=65 if c.isupper() else 97\n            r+=chr((ord(c)-base+s)%26+base)\n        else:\n            r+=c\n    return r\n# decode(t,s) = encode(t,-s)',aiCheck:true,aiCriteria:'Проверь код на Python: реализует ли он шифр Цезаря корректно (encode и decode), обрабатывает ли не-буквенные символы и регистр, есть ли краевые случаи. Укажи конкретные баги, если есть.'},
+{id:'sec2',title:'Простой сканер портов',diff:'mid',desc:'Напиши скрипт на Python (socket), проверяющий, открыты ли порты 20–100 на localhost. Вставь свой код ниже для проверки.',type:'reveal',solution:'import socket\nfor port in range(20,101):\n    s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.settimeout(0.2)\n    if s.connect_ex(("127.0.0.1",port))==0:\n        print("open:",port)\n    s.close()',aiCheck:true,aiCriteria:'Проверь код сканера портов на Python: корректность использования socket, обработка таймаутов, закрытие соединений, диапазон портов. Укажи баги и как их исправить.'},
+{id:'sec3',title:'Найди уязвимость в коде',diff:'mid',desc:'В коде запрос собирается так: строка SELECT из таблицы users по полю name, куда напрямую подставляется значение переменной username без какой-либо обработки. Какая это уязвимость и как её исправить? Опиши свой ответ ниже для проверки.',type:'reveal',solution:'Это SQL injection: имя пользователя подставляется в запрос без экранирования. Исправление — использовать параметризованные запросы (prepared statements), напр. cursor.execute("SELECT * FROM users WHERE name = %s", (username,)).',aiCheck:true,aiCriteria:'Правильный ответ: это SQL injection, исправление — параметризованные запросы / prepared statements. Проверь, назвал ли ученик именно эту уязвимость и предложил ли рабочее исправление.'},
+{id:'sec4',title:'Расшифруй Vigenère',diff:'hard',desc:'Шифротекст LXFOPVEFRNHR зашифрован шифром Виженера с ключом LEMON. Расшифруй вручную или скриптом. Вставь свой ответ и ход решения ниже.',type:'reveal',solution:'Открытый текст: ATTACKATDAWN. Формула: P_i=(C_i−K_i) mod 26, ключ повторяется циклически.',aiCheck:true,aiCriteria:'Правильный открытый текст: ATTACKATDAWN. Проверь, получил ли ученик верный ответ и понимает ли формулу расшифровки Виженера P_i=(C_i−K_i) mod 26.'},
+{id:'sec5',title:'Анализ трафика на признаки DDoS',diff:'mid',desc:'В Wireshark найди признаки DDoS: резкий рост числа SYN-пакетов с разных IP на один порт за короткое время.',type:'checklist'},
+{id:'sec6',title:'SHA-256 сравнение файлов',diff:'easy',desc:'Напиши скрипт, вычисляющий SHA-256 хеш двух файлов и сообщающий, идентичны ли они. Вставь свой код ниже для проверки.',type:'reveal',solution:'import hashlib\ndef sha256(path):\n    h=hashlib.sha256()\n    with open(path,"rb") as f:\n        h.update(f.read())\n    return h.hexdigest()\nprint(sha256("a.txt")==sha256("b.txt"))',aiCheck:true,aiCriteria:'Проверь код: корректно ли читается файл (в бинарном режиме), правильно ли считается SHA-256, правильно ли сравниваются хеши.'},
+{id:'sec7',title:'CTF: факторизация малого RSA',diff:'hard',desc:'Дано n=3233, e=17. Разложи n на p и q, найди d, расшифруй c=2790. Распиши ход решения и итоговое m ниже для проверки.',type:'reveal',solution:'n=61·53. φ(n)=3120. d=2753. m=c^d mod n=65.',aiCheck:true,aiCriteria:'Правильный ответ: p=61, q=53, d=2753, m=65. Проверь корректность хода решения, а не только финальное число.'},
+{id:'sec8',title:'Найди CSRF-уязвимость',diff:'mid',desc:'Форма смены пароля отправляет POST-запрос без какого-либо токена, привязанного к сессии пользователя. Какая это уязвимость и как защититься? Опиши свой ответ ниже для проверки.',type:'reveal',solution:'Это CSRF: злоумышленник может заставить браузер жертвы отправить форму от её имени. Защита — CSRF-токен, привязанный к сессии, плюс проверка заголовка Origin/Referer и SameSite-cookie.',aiCheck:true,aiCriteria:'Правильный ответ: это CSRF, защита — CSRF-токен + проверка Origin/Referer + SameSite-cookie. Проверь, назвал ли ученик верную уязвимость и рабочую защиту.'}
+]
+};
+
+/* ================= BANK STATE / RENDER ================= */
+let bankCat='english', bankMode='cards', fcDeck=[], fcIdx=0, quiz=null;
+document.querySelectorAll('#cat-nav button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#cat-nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); bankCat=btn.getAttribute('data-cat'); renderBank();
+  });
+});
+document.querySelectorAll('#mode-nav button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#mode-nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); bankMode=btn.getAttribute('data-mode'); renderBank();
+  });
+});
+function knownKey(cat){ return 'fc-known-'+cat; }
+function getKnown(cat){ return state[knownKey(cat)] || {}; }
+function setKnown(cat,obj){ state[knownKey(cat)]=obj; saveState(state); }
+function renderBank(){
+  updateBankStats();
+  const el = document.getElementById('bank-content');
+  if(bankMode==='cards') renderCards(el);
+  else if(bankMode==='quiz') renderQuizStart(el);
+  else renderLabs(el);
+}
+function updateBankStats(){
+  const deck = bankFor(bankCat);
+  const known = getKnown(bankCat);
+  const knownCount = Object.keys(known).filter(k=>known[k]).length;
+  document.getElementById('stat-known').textContent = knownCount+'/'+deck.length;
+  const bestKey = 'quiz-best-'+bankCat;
+  document.getElementById('stat-quiz').textContent = state[bestKey] ? state[bestKey]+'/10' : '—';
+  const cats = bankCat==='all' ? ['english','mathphys','security'] : [bankCat];
+  let labTotal=0, labDone=0;
+  cats.forEach(c=>{ LABS[c].forEach(l=>{ labTotal++; if(state['lab-done-'+l.id]) labDone++; }); });
+  document.getElementById('stat-labs').textContent = labDone+'/'+labTotal;
+}
+function renderCards(el){ fcDeck = shuffle(bankFor(bankCat)); fcIdx=0; paintCard(el); }
+function paintCard(el){
+  const item = fcDeck[fcIdx];
+  const known = getKnown(bankCat);
+  el.innerHTML =
+    '<div class="fc-wrap">'+
+    '<div class="fc-counter"><span>Карточка '+(fcIdx+1)+' / '+fcDeck.length+' · '+CATLABELS[bankCat]+'</span><span>Изучено: '+Object.keys(known).filter(k=>known[k]).length+'/'+fcDeck.length+'</span></div>'+
+    '<div class="flashcard" id="fc-card"><span class="hint">нажми, чтобы перевернуть</span>'+
+      '<div class="fc-term">'+item.t+'</div>'+
+      '<div class="fc-def" id="fc-def" style="display:none">'+item.d+'</div>'+
+      (item.ex ? '<div class="fc-ex" id="fc-ex" style="display:none">'+item.ex+'</div>' : '')+
+    '</div>'+
+    '<div class="fc-controls">'+
+      '<button class="btn" id="fc-prev">← Назад</button>'+
+      '<button class="btn bad" id="fc-repeat">Повторить</button>'+
+      '<button class="btn good" id="fc-know">Знаю ✓</button>'+
+      '<button class="btn" id="fc-next">Дальше →</button>'+
+      '<button class="btn primary" id="fc-shuffle">Перемешать</button>'+
+    '</div></div>';
+  document.getElementById('fc-card').addEventListener('click', ()=>{
+    const d=document.getElementById('fc-def'); const ex=document.getElementById('fc-ex');
+    const show = d.style.display==='none';
+    d.style.display = show?'block':'none'; if(ex) ex.style.display = show?'block':'none';
+  });
+  document.getElementById('fc-prev').addEventListener('click', ()=>{ fcIdx=(fcIdx-1+fcDeck.length)%fcDeck.length; paintCard(el); });
+  document.getElementById('fc-next').addEventListener('click', ()=>{ fcIdx=(fcIdx+1)%fcDeck.length; paintCard(el); });
+  document.getElementById('fc-shuffle').addEventListener('click', ()=>{ fcDeck=shuffle(fcDeck); fcIdx=0; paintCard(el); });
+  document.getElementById('fc-know').addEventListener('click', ()=>{
+    const k=getKnown(bankCat); k[item.t]=true; setKnown(bankCat,k);
+    fcIdx=(fcIdx+1)%fcDeck.length; paintCard(el); updateBankStats(); markActivity();
+  });
+  document.getElementById('fc-repeat').addEventListener('click', ()=>{
+    const k=getKnown(bankCat); k[item.t]=false; setKnown(bankCat,k);
+    fcIdx=(fcIdx+1)%fcDeck.length; paintCard(el); updateBankStats(); markActivity();
+  });
+}
+function buildQuiz(cat,n){
+  const deck = bankFor(cat); n=Math.min(n,deck.length);
+  const chosen = shuffle(deck).slice(0,n);
+  const questions = chosen.map(item=>{
+    const distractors = shuffle(deck.filter(x=>x.t!==item.t)).slice(0,3).map(x=>x.d);
+    const options = shuffle([item.d, ...distractors]);
+    return {term:item.t, correct:item.d, options};
+  });
+  return {cat, questions, idx:0, score:0};
+}
+function renderQuizStart(el){
+  el.innerHTML = '<div class="quiz-wrap"><p style="color:var(--ink-dim);font-size:13.5px;">Тест из 10 вопросов по банку «'+CATLABELS[bankCat]+'».</p><button class="btn primary" id="quiz-begin">Начать тест</button></div>';
+  document.getElementById('quiz-begin').addEventListener('click', ()=>{ quiz=buildQuiz(bankCat,10); paintQuiz(el); });
+}
+function paintQuiz(el){
+  if(quiz.idx >= quiz.questions.length){
+    const key='quiz-best-'+quiz.cat;
+    if(!state[key] || quiz.score>state[key]){ state[key]=quiz.score; }
+    const histKey='quiz-hist-'+quiz.cat;
+    const hist = state[histKey]||[];
+    hist.push({date:todayISO(), score:quiz.score});
+    state[histKey]=hist;
+    saveState(state); markActivity();
+    el.innerHTML = '<div class="quiz-result"><div style="font-family:var(--mono);color:var(--ink-faint);font-size:11px;letter-spacing:.1em;">РЕЗУЛЬТАТ</div><div class="big">'+quiz.score+' / '+quiz.questions.length+'</div><button class="btn primary" id="quiz-again">Пройти ещё раз</button></div>';
+    document.getElementById('quiz-again').addEventListener('click', ()=>{ quiz=buildQuiz(bankCat,10); paintQuiz(el); });
+    updateBankStats();
+    return;
+  }
+  const q = quiz.questions[quiz.idx];
+  el.innerHTML = '<div class="quiz-wrap"><div class="quiz-score">Счёт: '+quiz.score+' · Вопрос '+(quiz.idx+1)+'/'+quiz.questions.length+'</div><div class="quiz-q">Что означает термин</div><div class="quiz-term">'+q.term+'</div><div id="quiz-opts"></div></div>';
+  const optsEl = document.getElementById('quiz-opts');
+  q.options.forEach(opt=>{
+    const b = document.createElement('button'); b.className='quiz-opt'; b.textContent=opt;
+    b.addEventListener('click', ()=>{
+      if(optsEl.classList.contains('locked')) return;
+      optsEl.classList.add('locked');
+      const correct = opt===q.correct;
+      if(correct) quiz.score++;
+      Array.from(optsEl.children).forEach(c=>{
+        c.classList.add('locked');
+        if(c.textContent===q.correct) c.classList.add('correct');
+        else if(c===b) c.classList.add('wrong');
+      });
+      const next=document.createElement('button'); next.className='btn primary'; next.style.marginTop='14px';
+      next.textContent = (quiz.idx+1<quiz.questions.length) ? 'Следующий вопрос →' : 'Показать результат';
+      next.addEventListener('click', ()=>{ quiz.idx++; paintQuiz(el); });
+      el.querySelector('.quiz-wrap').appendChild(next);
+    });
+    optsEl.appendChild(b);
+  });
+}
+function renderLabs(el){
+  const cats = bankCat==='all' ? ['english','mathphys','security'] : [bankCat];
+  let html='';
+  cats.forEach(c=>{
+    LABS[c].forEach(lab=>{
+      const done = !!state['lab-done-'+lab.id];
+      html += '<div class="lab-card" data-id="'+lab.id+'"><div class="lab-head"><span class="lab-title">'+lab.title+'</span><span class="badge '+lab.diff+'">'+({easy:'легко',mid:'средне',hard:'сложно'}[lab.diff])+'</span></div><div class="lab-desc">'+lab.desc.replace(/\n/g,'<br>')+'</div>';
+      if(lab.type==='numeric'){
+        html += '<div class="lab-row"><input type="text" id="ans-'+lab.id+'" placeholder="ответ"><button class="btn" id="chk-'+lab.id+'">Проверить</button><span class="lab-result" id="res-'+lab.id+'"></span></div>';
+      } else if(lab.type==='reveal'){
+        html += '<div class="lab-row"><button class="btn" id="rev-'+lab.id+'">Показать решение</button></div><div class="lab-solution" id="sol-'+lab.id+'">'+lab.solution.replace(/\n/g,'<br>')+'</div>';
+      }
+      if(lab.aiCheck){
+        html += '<div class="ai-check"><div class="ai-check-label">Развёрнутая проверка ИИ — вставь своё решение</div>'+
+          '<textarea class="ai-textarea" id="aitext-'+lab.id+'" rows="5" placeholder="Вставь сюда свой текст / код / ход решения..."></textarea>'+
+          '<button class="btn primary" id="aibtn-'+lab.id+'">Проверить с помощью ИИ</button>'+
+          '<div class="ai-result" id="airesult-'+lab.id+'"></div></div>';
+      }
+      html += '<label class="lab-done-row"><input type="checkbox" id="done-'+lab.id+'" '+(done?'checked':'')+'> ОТМЕТИТЬ КАК ВЫПОЛНЕННОЕ</label></div>';
+    });
+  });
+  el.innerHTML = html;
+  cats.forEach(c=>{
+    LABS[c].forEach(lab=>{
+      if(lab.type==='numeric'){
+        document.getElementById('chk-'+lab.id).addEventListener('click', ()=>{
+          const v = document.getElementById('ans-'+lab.id).value.trim();
+          const res = document.getElementById('res-'+lab.id);
+          if(v===lab.answer){ res.textContent='✓ верно'; res.className='lab-result ok'; addXP(5,'lab-numeric'); markActivity(); }
+          else { res.textContent='✗ попробуй ещё'; res.className='lab-result no'; }
+        });
+      } else if(lab.type==='reveal'){
+        document.getElementById('rev-'+lab.id).addEventListener('click', ()=>{ document.getElementById('sol-'+lab.id).classList.toggle('show'); });
+      }
+      if(lab.aiCheck){
+        document.getElementById('aibtn-'+lab.id).addEventListener('click', ()=>runAICheck(lab));
+      }
+      document.getElementById('done-'+lab.id).addEventListener('change', e=>{
+        state['lab-done-'+lab.id]=e.target.checked; saveState(state); updateBankStats(); markActivity();
+      });
+    });
+  });
+}
+
+/* ================= AI CHECKING (Anthropic API) ================= */
+async function askAI(prompt){
+  const apiKey = state['ai-key'];
+  const model = state['ai-model'] || (apiKey ? 'claude-sonnet-5' : 'claude-sonnet-4-6');
+  const headers = {"content-type":"application/json"};
+  if(apiKey){
+    headers["x-api-key"] = apiKey;
+    headers["anthropic-version"] = "2023-06-01";
+    headers["anthropic-dangerous-direct-browser-access"] = "true";
+  }
+  const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    method:"POST", headers,
+    body: JSON.stringify({model, max_tokens:1000, messages:[{role:"user", content:prompt}]})
+  });
+  if(!resp.ok){
+    let detail = '';
+    try{ const j = await resp.json(); detail = (j.error && j.error.message) || ''; }catch(e){}
+    throw new Error('HTTP '+resp.status+(detail?' — '+detail:''));
+  }
+  const data = await resp.json();
+  return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+}
+function buildGradingPrompt(lab, userText){
+  return 'Ты — строгий, но доброжелательный проверяющий преподаватель. Задание ученика: "'+lab.title+'". '+
+    'Описание задания: "'+lab.desc.replace(/"/g,"'")+'". '+
+    (lab.aiCriteria ? 'Критерии проверки: '+lab.aiCriteria.replace(/"/g,"'")+' ' : '')+
+    (lab.solution ? 'Эталонное решение/ориентир (не обязательно единственно верный ответ, но используй как опору): "'+lab.solution.replace(/"/g,"'").replace(/\n/g,' ')+'" ' : '')+
+    '\n\nВот присланное решение ученика:\n"""\n'+userText+'\n"""\n\n'+
+    'Дай развёрнутую проверку на русском языке по пунктам:\n'+
+    '1) Оценка по 10-балльной шкале.\n'+
+    '2) Что сделано верно.\n'+
+    '3) Конкретные ошибки и как их исправить.\n'+
+    '4) Итоговая рекомендация: готово или нужна доработка.\n'+
+    'Пиши по существу, без лишней воды.';
+}
+async function runAICheck(lab){
+  const ta = document.getElementById('aitext-'+lab.id);
+  const btn = document.getElementById('aibtn-'+lab.id);
+  const res = document.getElementById('airesult-'+lab.id);
+  const text = ta.value.trim();
+  if(!text){ res.innerHTML = '<p class="ai-err">Сначала вставь текст решения.</p>'; return; }
+  btn.disabled = true; const oldLabel = btn.textContent; btn.textContent = 'Проверяю…';
+  res.innerHTML = '';
+  try{
+    const answer = await askAI(buildGradingPrompt(lab, text));
+    res.innerHTML = '<div class="ai-feedback">'+answer.replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</div>';
+    addXP(15,'ai-check'); markActivity();
+  }catch(e){
+    res.innerHTML = '<p class="ai-err">Не удалось получить проверку: '+e.message+'.<br>Если сайт открыт как отдельная страница (например, на GitHub Pages), укажи свой Anthropic API-ключ в разделе «05 · Прогресс и достижения» → «Настройки ИИ-проверки».</p>';
+  }
+  btn.disabled = false; btn.textContent = oldLabel;
+}
+
+/* ================= FITNESS BRANCH ================= */
+const FIT_SECTIONS = [
+{id:'split', num:'01', title:'НЕДЕЛЬНЫЙ СПЛИТ (5–6 ДНЕЙ)', body:'<div id="split-days"></div>'+
+  '<h4>Техника и прогрессия</h4><ul>'+
+  '<li>Базовые движения (присед, тяга, жим) — приоритет над изоляцией: они дают больше всего массы за подход</li>'+
+  '<li>Прогрессия нагрузки: если сделал верхнюю границу повторений во всех подходах — добавь 2,5–5% веса на следующей тренировке</li>'+
+  '<li>Разминка: 5–10 мин лёгкое кардио + 1–2 разминочных подхода с пустым грифом перед рабочими весами</li>'+
+  '<li>Темп выполнения: 2 сек негативная фаза, 1 сек пауза, взрывное усилие вверх — так лучше растёт мышца, а не просто швыряется вес</li>'+
+  '<li>Отдых между подходами: 60–90 сек на изоляцию, 2–3 мин на базовые многосуставные</li>'+
+  '<li>Deload-неделя раз в 6–8 недель: снижай рабочие веса на 40% на 1 неделю, чтобы избежать перетренированности</li>'+
+  '</ul>'+
+  '<p style="margin-top:10px;">Объём: 4–5 упражнений на группу мышц, 8–12 повторений, 3–4 подхода.</p>'+
+  '<button class="btn" id="split-reset">Сбросить неделю</button>'},
+{id:'nutrition', num:'02', title:'ПИТАНИЕ', body:'<p>Профицит калорий: <b style="color:var(--cyan)">+500–700 ккал</b> над поддерживающим уровнем (≈2800–3000 ккал/день) → целевая калорийность ≈<b style="color:var(--cyan)">3300–3700 ккал/день</b>.</p><div class="macro-row"><span>Белок</span><b>2.5–3 г/кг веса</b></div><div class="macro-row"><span>Углеводы</span><b>сложные: рис, овсянка, гречка, картофель + фрукты</b></div><div class="macro-row"><span>Жиры</span><b>60–80 г (авокадо, орехи, масло)</b></div><h4>Пример дневного меню</h4><ul><li>Завтрак: 5 яиц + овсянка 80 г + банан</li><li>Обед: 200 г курицы + 150 г риса + овощи</li><li>После тренировки: протеиновый коктейль + банан</li><li>Ужин: 150 г рыбы + гарнир</li></ul><h4>Питание вокруг пробежек</h4><ul><li>За 60–90 мин до бега: лёгкие углеводы (банан, тост с мёдом) — избегай жирного и клетчатки перед стартом</li><li>Долгие пробежки (14+ км): взять с собой изотоник или воду с щепоткой соли на жару</li><li>В течение 30–60 мин после — окно восстановления: белок + углеводы (коктейль + банан, или йогурт с гранолой)</li></ul>'},
+{id:'running', num:'03', title:'БЕГ', body:''+
+  '<h4>Недельная структура (40–55 км)</h4><ul>'+
+  '<li><b>Лёгкие пробежки (2–3 раза/нед)</b> — 60–70% от макс. ЧСС, разговорный темп (можешь говорить предложениями). Это основа объёма, база выносливости.</li>'+
+  '<li><b>Темповая пробежка (1 раз/нед)</b> — 15–20 мин в комфортно-тяжёлом темпе (~80–85% ЧСС) после разминки, развивает порог анаэробного обмена.</li>'+
+  '<li><b>Интервалы (1 раз/нед, опционально)</b> — например 6×400 м в быстром темпе с 90 сек трусцой между, развивает скорость и VO2max.</li>'+
+  '<li><b>Длинная пробежка (1 раз/нед)</b> — на 30–40% длиннее обычной дистанции, медленный темп, развивает выносливость и укрепляет связки.</li>'+
+  '</ul>'+
+  '<h4>Правило 10%</h4><p>Не увеличивай недельный объём больше чем на ~10% от предыдущей недели — это главная защита от травм при наращивании километража к 60 км/нед.</p>'+
+  '<h4>Разминка и заминка</h4><ul>'+
+  '<li>Перед бегом: 5 мин быстрой ходьбы + динамическая растяжка (махи ногами, выпады, высокие колени) — НЕ статическая растяжка на холодные мышцы</li>'+
+  '<li>После бега: 5–10 мин лёгкой трусцы/ходьбы для остывания + статическая растяжка икр, бедер, ягодиц по 30 сек</li>'+
+  '</ul>'+
+  '<h4>Профилактика травм</h4><ul>'+
+  '<li>Смена кроссовок каждые 600–800 км пробега</li>'+
+  '<li>Силовые для бегунов 1–2 раза/нед: приседания, выпады, подъёмы на носки — укрепляют колени и голеностоп</li>'+
+  '<li>При боли, которая не проходит после разминки — стоп, отдых 2–3 дня, не бежать «через боль»</li>'+
+  '<li>Раскатка на роллере икр/бедер 5–10 мин после длинных пробежек</li>'+
+  '</ul>'+
+  '<h4>Ориентир по темпу (подставь свои цифры по факту)</h4><ul>'+
+  '<li>Лёгкий темп: на 60–90 сек/км медленнее темпа 10 км</li>'+
+  '<li>Темповый бег: примерно на уровне темпа полумарафона</li>'+
+  '<li>Интервалы: быстрее темпа 5 км</li>'+
+  '</ul>'+
+  '<p>Целевой объём сейчас: <b style="color:var(--cyan)">40–55 км/нед</b>. К 2027–2028 — постепенно, не более +10%/нед, довести до <b style="color:var(--cyan)">60 км+/нед</b>. Журнал пробежек — в отдельном блоке ниже.</p>'},
+{id:'recovery', num:'04', title:'ВОССТАНОВЛЕНИЕ', body:'<div id="recovery-checklist"></div>'}
+];
+const SPLIT_DATA = [
+{day:'Понедельник', focus:'Верх тела + пресс', ex:['Жим лёжа 4×8–10','Приседания с гантелями 3×10','Подтягивания 4×AMRAP','Планка 3×60 сек']},
+{day:'Вторник', focus:'Ноги + ягодицы + кор', ex:['Приседания со штангой 4×8','Румынская тяга 3×10','Выпады 3×12','Разгибания/сгибания ног 3×12']},
+{day:'Среда', focus:'Верх тела + пресс', ex:['Жим гантелей сидя 4×10','Тяга штанги в наклоне 4×10','Отжимания на брусьях 3×AMRAP','Скручивания 3×20']},
+{day:'Четверг', focus:'Ноги + ягодицы + кор', ex:['Становая тяга 4×6','Жим ногами 3×12','Подъём на носки стоя 4×15','Русские скручивания 3×20']},
+{day:'Пятница', focus:'Верх тела + пресс', ex:['Жим штанги лёжа 4×8','Тяга верхнего блока 4×10','Разводка гантелей 3×12','Боковая планка 3×45 сек']},
+{day:'Суббота', focus:'Лёгкое кардио', ex:['30–45 мин бег или велотренажёр в низком пульсе']},
+{day:'Воскресенье', focus:'Отдых', ex:['Полное восстановление, растяжка 15 мин']}
+];
+const RECOVERY_ITEMS = ['Сон 8+ часов','Магний + витамин D','Креатин 5 г','Массаж/роллер (1–2 раза в неделю)'];
+let fitInitDone = false;
+function renderFitness(){
+  const h=document.getElementById('f-height'), w=document.getElementById('f-weight'), s=document.getElementById('f-sessions');
+  if(!fitInitDone){
+    h.value = state['f-height'] ?? 189; w.value = state['f-weight'] ?? 65; s.value = state['f-sessions'] ?? 0;
+    [['f-height',h],['f-weight',w],['f-sessions',s]].forEach(([k,el])=>{
+      el.addEventListener('input', ()=>{ state[k]=el.value; saveState(state); updateProteinCalc(); markActivity(); });
+    });
+    const secEl = document.getElementById('sections-fit');
+    FIT_SECTIONS.forEach(sec=>{
+      const card=document.createElement('section'); card.className='card';
+      card.innerHTML = '<div class="card-head"><span class="card-num">'+sec.num+'</span><span class="card-title">'+sec.title+'</span><span class="chev">▸</span></div><div class="card-body"><div class="card-inner">'+sec.body+'</div></div>';
+      card.querySelector('.card-head').addEventListener('click', ()=>card.classList.toggle('open'));
+      secEl.appendChild(card);
+    });
+    const splitEl = document.getElementById('split-days');
+    SPLIT_DATA.forEach((d,di)=>{
+      const col=document.createElement('div'); col.className='day-col'; col.style.marginBottom='10px';
+      let exHtml = '<div class="d-name">'+d.day+' · '+d.focus+'</div><div class="ex-list">';
+      d.ex.forEach((exName,ei)=>{
+        const key='split-'+di+'-'+ei;
+        exHtml += '<label class="check-item '+(state[key]?'checked':'')+'"><input type="checkbox" data-key="'+key+'" '+(state[key]?'checked':'')+'><span>'+exName+'</span></label>';
+      });
+      exHtml += '</div>'; col.innerHTML = exHtml; splitEl.appendChild(col);
+    });
+    splitEl.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+      cb.addEventListener('change', e=>{
+        const key=e.target.getAttribute('data-key'); state[key]=e.target.checked;
+        e.target.closest('.check-item').classList.toggle('checked', e.target.checked);
+        saveState(state); markActivity();
+      });
+    });
+    document.getElementById('split-reset').addEventListener('click', ()=>{
+      SPLIT_DATA.forEach((d,di)=>d.ex.forEach((_,ei)=>{ delete state['split-'+di+'-'+ei]; }));
+      saveState(state); splitEl.innerHTML=''; fitInitDone=false; renderFitness();
+    });
+    const recEl = document.getElementById('recovery-checklist');
+    RECOVERY_ITEMS.forEach((txt,i)=>{
+      const key='recovery-'+i;
+      const row=document.createElement('label'); row.className='check-item'+(state[key]?' checked':'');
+      row.innerHTML = '<input type="checkbox" '+(state[key]?'checked':'')+'><span>'+txt+'</span>';
+      row.querySelector('input').addEventListener('change', e=>{
+        state[key]=e.target.checked; row.classList.toggle('checked', e.target.checked); saveState(state); markActivity();
+      });
+      recEl.appendChild(row);
+    });
+    document.getElementById('wlog-add').addEventListener('click', ()=>addLogEntry('weight-log','wlog-date','wlog-val'));
+    document.getElementById('rlog-add').addEventListener('click', ()=>addLogEntry('run-log','rlog-date','rlog-val'));
+    fitInitDone = true;
+  }
+  updateProteinCalc();
+  paintLog('weight-log','wlog-chart','wlog-table','кг');
+  paintLog('run-log','rlog-chart','rlog-table','км');
+}
+function updateProteinCalc(){
+  const w = parseFloat(document.getElementById('f-weight').value) || 0;
+  const lo=Math.round(w*2.5), hi=Math.round(w*3);
+  document.getElementById('f-protein').textContent = w ? (lo+'–'+hi+' г') : '—';
+}
+function addLogEntry(key,dateId,valId){
+  const dateEl=document.getElementById(dateId), valEl=document.getElementById(valId);
+  const date=dateEl.value, val=parseFloat(valEl.value);
+  if(!date||isNaN(val)) return;
+  const log=state[key]||[]; log.push({date,val}); log.sort((a,b)=>a.date.localeCompare(b.date));
+  state[key]=log; saveState(state); markActivity(); valEl.value='';
+  paintLog(key, key==='weight-log'?'wlog-chart':'rlog-chart', key==='weight-log'?'wlog-table':'rlog-table', key==='weight-log'?'кг':'км');
+}
+function removeLogEntry(key,idx,chartId,tableId,unit){
+  const log=state[key]||[]; log.splice(idx,1); state[key]=log; saveState(state);
+  paintLog(key,chartId,tableId,unit);
+}
+function paintLog(key,chartId,tableId,unit){
+  const log=state[key]||[]; const chartEl=document.getElementById(chartId); const tableEl=document.getElementById(tableId);
+  if(log.length===0){ chartEl.innerHTML='<p style="color:var(--ink-faint);font-size:12.5px;margin-top:10px;">Пока нет записей.</p>'; tableEl.innerHTML=''; return; }
+  const max=Math.max(...log.map(e=>e.val),1);
+  let barsHtml='<div class="bar-chart">';
+  log.forEach(e=>{ const h=Math.max(6,Math.round((e.val/max)*84)); barsHtml+='<div class="bar" style="height:'+h+'px"><span>'+e.val+'</span></div>'; });
+  barsHtml+='</div>'; chartEl.innerHTML=barsHtml;
+  let rows='<table class="log-table"><tr><th>Дата</th><th>'+unit+'</th><th></th></tr>';
+  log.forEach((e,i)=>{ rows+='<tr><td>'+e.date+'</td><td>'+e.val+'</td><td class="del" data-idx="'+i+'">✕</td></tr>'; });
+  rows+='</table>'; tableEl.innerHTML=rows;
+  tableEl.querySelectorAll('.del').forEach(cell=>{
+    cell.addEventListener('click', ()=>{ removeLogEntry(key, parseInt(cell.getAttribute('data-idx')), chartId, tableId, unit); });
+  });
+}
+
+/* ================= PLANNER: CALENDAR + JOURNAL ================= */
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let selectedDate = todayISO();
+function daysInMonth(y,m){ return new Date(y,m+1,0).getDate(); }
+function renderCalendar(){
+  const grid=document.getElementById('cal-grid'); const label=document.getElementById('cal-label');
+  const monthNames=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  label.textContent = monthNames[calMonth]+' '+calYear;
+  const first = new Date(calYear,calMonth,1);
+  const startOffset = (first.getDay()+6)%7;
+  const total = daysInMonth(calYear,calMonth);
+  let html=''; ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d=>{ html+='<div class="cal-dow">'+d+'</div>'; });
+  for(let i=0;i<startOffset;i++) html+='<div class="cal-cell empty"></div>';
+  for(let day=1; day<=total; day++){
+    const iso = calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    const tasks = state['cal-'+iso]||[];
+    const isToday = iso===todayISO(); const isSel = iso===selectedDate;
+    html += '<div class="cal-cell'+(isToday?' today':'')+(isSel?' selected':'')+'" data-date="'+iso+'">'+day+(tasks.length?'<div class="cal-dot"></div>':'')+'</div>';
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('.cal-cell[data-date]').forEach(cell=>{
+    cell.addEventListener('click', ()=>{ selectedDate=cell.getAttribute('data-date'); renderCalendar(); renderDayTasks(); });
+  });
+}
+function renderDayTasks(){
+  const el=document.getElementById('day-tasks');
+  const tasks = state['cal-'+selectedDate]||[];
+  let html='<div style="font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-bottom:6px;">ЗАДАЧИ НА '+selectedDate+'</div>';
+  tasks.forEach((t,i)=>{
+    html += '<label class="task-row'+(t.done?' done':'')+'"><input type="checkbox" data-idx="'+i+'" '+(t.done?'checked':'')+'><span>'+t.text+'</span><span class="del" data-del="'+i+'" style="margin-left:auto;color:var(--bad);cursor:pointer;">✕</span></label>';
+  });
+  html += '<div class="task-add"><input type="text" id="task-input" placeholder="новая задача"><button class="btn" id="task-add-btn">+</button></div>';
+  el.innerHTML = html;
+  el.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', e=>{
+      const i=parseInt(e.target.getAttribute('data-idx'));
+      const arr=state['cal-'+selectedDate]||[]; arr[i].done=e.target.checked; state['cal-'+selectedDate]=arr;
+      markActivity(); renderCalendar(); renderDayTasks();
+    });
+  });
+  el.querySelectorAll('.del').forEach(d=>{
+    d.addEventListener('click', ()=>{
+      const i=parseInt(d.getAttribute('data-del'));
+      const arr=state['cal-'+selectedDate]||[]; arr.splice(i,1); state['cal-'+selectedDate]=arr;
+      saveState(state); renderCalendar(); renderDayTasks();
+    });
+  });
+  document.getElementById('task-add-btn').addEventListener('click', ()=>{
+    const inp=document.getElementById('task-input'); if(!inp.value.trim()) return;
+    const arr=state['cal-'+selectedDate]||[]; arr.push({text:inp.value.trim(), done:false}); state['cal-'+selectedDate]=arr;
+    markActivity(); renderCalendar(); renderDayTasks();
+  });
+}
+document.getElementById('cal-prev').addEventListener('click', ()=>{ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); });
+document.getElementById('cal-next').addEventListener('click', ()=>{ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); });
+document.getElementById('journal-add-btn').addEventListener('click', ()=>{
+  const ta=document.getElementById('journal-text'); if(!ta.value.trim()) return;
+  const arr=state['journal']||[]; arr.unshift({date:todayISO(), text:ta.value.trim()}); state['journal']=arr;
+  ta.value=''; markActivity(); renderJournal();
+});
+function renderJournal(){
+  const el=document.getElementById('journal-list'); const arr=state['journal']||[];
+  if(arr.length===0){ el.innerHTML='<p style="color:var(--ink-faint);font-size:12.5px;">Пока нет записей.</p>'; return; }
+  el.innerHTML = arr.map((e,i)=>'<div class="journal-entry"><div class="j-date">'+e.date+' <span style="float:right;color:var(--bad);cursor:pointer;" data-jdel="'+i+'">удалить</span></div><div class="j-text">'+e.text.replace(/</g,'&lt;')+'</div></div>').join('');
+  el.querySelectorAll('[data-jdel]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i=parseInt(btn.getAttribute('data-jdel')); arr.splice(i,1); state['journal']=arr; saveState(state); renderJournal();
+    });
+  });
+}
+function renderPlanner(){ renderCalendar(); renderDayTasks(); renderJournal(); }
+
+/* ================= PROGRESS / ANALYTICS / ACHIEVEMENTS ================= */
+function renderProgress(){
+  const xp = computeXP(); const level = levelFromXP(xp); const streak = currentStreak();
+  document.getElementById('pg-level').innerHTML = 'Уровень <b style="color:var(--cyan)">'+level+'</b>';
+  document.getElementById('pg-xp').innerHTML = '<b style="color:var(--cyan)">'+xp+'</b> XP суммарно';
+  document.getElementById('pg-streak').innerHTML = '<b style="color:var(--cyan)">'+streak+'</b> дней подряд';
+
+  const fcEl = document.getElementById('pg-flashcards');
+  let fcHtml='';
+  [['english','Английский'],['mathphys','Матем./Физика'],['security','Security']].forEach(([cat,label])=>{
+    const known = Object.values(state['fc-known-'+cat]||{}).filter(Boolean).length;
+    const total = BANKS[cat].length;
+    const pct = total?Math.round(known/total*100):0;
+    fcHtml += '<div class="macro-row"><span>'+label+'</span><b>'+known+'/'+total+' ('+pct+'%)</b></div>';
+  });
+  fcEl.innerHTML = fcHtml;
+
+  const qEl = document.getElementById('pg-quiz');
+  let qHtml='';
+  ['english','mathphys','security','all'].forEach(cat=>{
+    const hist = state['quiz-hist-'+cat]||[];
+    if(hist.length){ qHtml += '<div class="macro-row"><span>'+CATLABELS[cat]+'</span><b>лучший '+state['quiz-best-'+cat]+'/10 · попыток '+hist.length+'</b></div>'; }
+  });
+  qEl.innerHTML = qHtml || '<p style="color:var(--ink-faint);font-size:12.5px;">Пока нет пройденных тестов.</p>';
+
+  let totalEx=0, doneEx=0;
+  SPLIT_DATA.forEach((d,di)=>d.ex.forEach((_,ei)=>{ totalEx++; if(state['split-'+di+'-'+ei]) doneEx++; }));
+  document.getElementById('pg-split-rate').textContent = totalEx? Math.round(doneEx/totalEx*100)+'% упражнений отмечено на этой неделе' : '—';
+
+  const wEl = document.getElementById('pg-weight-trend');
+  const wlog = state['weight-log']||[];
+  const fcast = document.getElementById('pg-weight-forecast');
+  if(wlog.length>=2){
+    const first=wlog[0], last=wlog[wlog.length-1];
+    const days=(new Date(last.date)-new Date(first.date))/86400000;
+    const rate = days>0 ? (last.val-first.val)/days : 0;
+    const max=Math.max(...wlog.map(e=>e.val),1);
+    let bars='<div class="bar-chart">';
+    wlog.forEach(e=>{ const h=Math.max(6,Math.round((e.val/max)*84)); bars+='<div class="bar" style="height:'+h+'px"><span>'+e.val+'</span></div>'; });
+    bars+='</div>'; wEl.innerHTML=bars;
+    if(rate>0){
+      const targetW=first.val+6; const daysNeeded=(targetW-last.val)/rate;
+      if(daysNeeded>0){
+        const projDate=new Date(Date.now()+daysNeeded*86400000);
+        fcast.textContent = 'Темп набора: ~'+(rate*7).toFixed(2)+' кг/нед. При этом темпе цель +6 кг — примерно '+projDate.toLocaleDateString('ru-RU')+'.';
+      } else { fcast.textContent = 'Цель +6 кг уже достигнута по текущим данным.'; }
+    } else { fcast.textContent = 'Пока недостаточно роста веса для прогноза — добавляй записи регулярно.'; }
+  } else {
+    wEl.innerHTML = '<p style="color:var(--ink-faint);font-size:12.5px;">Нужно минимум 2 записи веса для графика.</p>';
+    fcast.textContent='';
+  }
+
+  const achEl = document.getElementById('pg-achievements');
+  achEl.innerHTML = ACHIEVEMENTS.map(a=>{
+    const unlocked = a.check(xp, streak);
+    return '<div class="ach-card'+(unlocked?' unlocked':'')+'"><div class="ach-title">'+(unlocked?'🏆 ':'🔒 ')+a.title+'</div><div class="ach-desc">'+a.desc+'</div></div>';
+  }).join('');
+
+  document.getElementById('ai-key-input').value = state['ai-key'] || '';
+  document.getElementById('ai-model-input').value = state['ai-model'] || '';
+}
+document.getElementById('ai-settings-save').addEventListener('click', ()=>{
+  state['ai-key'] = document.getElementById('ai-key-input').value.trim();
+  state['ai-model'] = document.getElementById('ai-model-input').value.trim();
+  saveState(state);
+  const status = document.getElementById('ai-settings-status');
+  status.style.color = 'var(--done)';
+  status.textContent = 'Сохранено.';
+  setTimeout(()=>{ status.textContent=''; }, 2500);
+});
+
+updateGamification();
+
+/* ================= JARVIS WIDGET ================= */
+let jarvisMode = 'backend';
+let jarvisInitDone = false;
+
+function jarvisSessionId(){
+  if(!state['jarvis-session']){ state['jarvis-session'] = 'web-'+Math.random().toString(36).slice(2)+Date.now().toString(36); saveState(state); }
+  return state['jarvis-session'];
+}
+
+function initJarvisOnce(){
+  if(jarvisInitDone) return;
+  jarvisInitDone = true;
+
+  document.getElementById('jarvis-url-input').value = state['jarvis-url'] || '';
+  document.getElementById('jarvis-groq-key').value = state['jarvis-groq-key'] || '';
+  document.getElementById('jarvis-deepseek-key').value = state['jarvis-deepseek-key'] || '';
+  jarvisMode = state['jarvis-mode'] || 'backend';
+  document.querySelectorAll('#jarvis-mode-nav button').forEach(b=>b.classList.toggle('active', b.getAttribute('data-mode')===jarvisMode));
+  document.getElementById('jarvis-settings-backend').style.display = jarvisMode==='backend' ? 'block':'none';
+  document.getElementById('jarvis-settings-direct').style.display = jarvisMode==='direct' ? 'block':'none';
+
+  document.querySelectorAll('#jarvis-mode-nav button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#jarvis-mode-nav button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      jarvisMode = btn.getAttribute('data-mode');
+      document.getElementById('jarvis-settings-backend').style.display = jarvisMode==='backend' ? 'block':'none';
+      document.getElementById('jarvis-settings-direct').style.display = jarvisMode==='direct' ? 'block':'none';
+    });
+  });
+
+  document.getElementById('jarvis-settings-save').addEventListener('click', ()=>{
+    state['jarvis-mode'] = jarvisMode;
+    state['jarvis-url'] = document.getElementById('jarvis-url-input').value.trim().replace(/\/$/,'');
+    state['jarvis-groq-key'] = document.getElementById('jarvis-groq-key').value.trim();
+    state['jarvis-deepseek-key'] = document.getElementById('jarvis-deepseek-key').value.trim();
+    saveState(state);
+    const status = document.getElementById('jarvis-settings-status');
+    status.style.color = 'var(--done)'; status.textContent = 'Сохранено.';
+    setTimeout(()=>{ status.textContent=''; }, 2500);
+  });
+
+  document.getElementById('jchat-send').addEventListener('click', sendJarvisMessage);
+  document.getElementById('jchat-input').addEventListener('keydown', e=>{
+    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendJarvisMessage(); }
+  });
+  document.getElementById('jchat-clear').addEventListener('click', ()=>{
+    state['jarvis-history'] = [];
+    delete state['jarvis-session'];
+    saveState(state);
+    paintJarvisLog();
+  });
+}
+
+function renderJarvisView(){
+  initJarvisOnce();
+  paintJarvisLog();
+}
+
+function paintJarvisLog(){
+  const log = state['jarvis-history'] || [];
+  const el = document.getElementById('jchat-log');
+  if(log.length===0){
+    el.innerHTML = '<p style="color:var(--ink-faint);font-size:12.5px;">Пока нет сообщений. Настрой подключение выше и напиши что-нибудь.</p>';
+    return;
+  }
+  el.innerHTML = log.map(m=>'<div class="jchat-msg '+m.role+'">'+m.text.replace(/</g,'&lt;')+'</div>').join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+async function callJarvisBackend(url, message){
+  const resp = await fetch(url+'/api/chat', {
+    method:'POST',
+    headers:{'content-type':'application/json'},
+    body: JSON.stringify({session_id: jarvisSessionId(), message})
+  });
+  if(!resp.ok) throw new Error('HTTP '+resp.status+' от бэкенда Jarvis');
+  const data = await resp.json();
+  return data.reply;
+}
+
+async function callDirectProvider(message){
+  const history = (state['jarvis-history']||[]).slice(-10).map(m=>({role: m.role==='user'?'user':'assistant', content:m.text}));
+  history.push({role:'user', content:message});
+  const messages = [{role:'system', content:'Ты — Джарвис, персональный ассистент. Отвечай на русском, по-деловому, без лишней воды.'}, ...history];
+
+  const groqKey = state['jarvis-groq-key'];
+  const dsKey = state['jarvis-deepseek-key'];
+
+  async function tryProvider(baseURL, apiKey, model){
+    const resp = await fetch(baseURL+'/chat/completions', {
+      method:'POST',
+      headers:{'content-type':'application/json','authorization':'Bearer '+apiKey},
+      body: JSON.stringify({model, messages})
+    });
+    if(!resp.ok){ const t = await resp.text().catch(()=> ''); throw new Error('HTTP '+resp.status+' '+t.slice(0,150)); }
+    const data = await resp.json();
+    return data.choices[0].message.content;
+  }
+
+  if(groqKey){
+    try{ return await tryProvider('https://api.groq.com/openai/v1', groqKey, 'llama-3.3-70b-versatile'); }
+    catch(e){ if(!dsKey) throw e; }
+  }
+  if(dsKey){
+    return await tryProvider('https://api.deepseek.com/v1', dsKey, 'deepseek-v4-flash');
+  }
+  throw new Error('Не указан ни один ключ (Groq или DeepSeek).');
+}
+
+async function sendJarvisMessage(){
+  const input = document.getElementById('jchat-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const statusEl = document.getElementById('jchat-status');
+  statusEl.textContent = '';
+
+  const log = state['jarvis-history'] || [];
+  log.push({role:'user', text});
+  state['jarvis-history'] = log; saveState(state);
+  input.value = '';
+  paintJarvisLog();
+
+  const sendBtn = document.getElementById('jchat-send');
+  sendBtn.disabled = true; sendBtn.textContent = 'Джарвис думает…';
+
+  try{
+    let reply;
+    if(jarvisMode==='backend'){
+      const url = state['jarvis-url'];
+      if(!url) throw new Error('Укажи URL своего Jarvis в настройках выше.');
+      reply = await callJarvisBackend(url, text);
+    } else {
+      reply = await callDirectProvider(text);
+    }
+    const log2 = state['jarvis-history'] || [];
+    log2.push({role:'assistant', text: reply});
+    state['jarvis-history'] = log2; saveState(state);
+    paintJarvisLog();
+    addXP(8,'jarvis-chat'); markActivity();
+  }catch(e){
+    statusEl.textContent = 'Ошибка: '+e.message+(jarvisMode==='backend' ? ' — проверь, что сервис на Railway/VPS запущен и URL указан без ошибки.' : ' — провайдер мог заблокировать прямой запрос из браузера (CORS); попробуй режим «Мой Jarvis (URL)».');
+  }
+  sendBtn.disabled = false; sendBtn.textContent = 'Отправить';
+}
 </script>
 </body>
 </html>
