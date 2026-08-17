@@ -27,6 +27,17 @@
       var(--bg);
   }
   a{color:var(--cyan);}
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;
+    background:repeating-linear-gradient(180deg, rgba(53,216,255,0.018) 0px, rgba(53,216,255,0.018) 1px, transparent 1px, transparent 3px);
+  }
+  body::after{
+    content:'';position:fixed;left:0;right:0;height:2px;pointer-events:none;z-index:9997;
+    background:linear-gradient(90deg, transparent, rgba(53,216,255,0.5), transparent);
+    animation: hud-scan 7s linear infinite;
+  }
+  @keyframes hud-scan{ 0%{ top:0%; opacity:0; } 5%{ opacity:.6; } 50%{ top:100%; opacity:.6; } 55%{ opacity:0; } 100%{ top:100%; opacity:0; } }
+  @keyframes hud-pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.55; } }
   ::-webkit-scrollbar{width:9px;height:9px;}
   ::-webkit-scrollbar-track{background:var(--bg-deep);}
   ::-webkit-scrollbar-thumb{background:var(--panel-line);border:2px solid var(--bg-deep);}
@@ -70,7 +81,8 @@
     flex:1;min-width:110px;background:rgba(255,255,255,0.03);border:1px solid var(--panel-line);color:var(--ink-dim);
     font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:11px 8px;cursor:pointer;transition:.15s;border-radius:3px;
   }
-  .main-nav button.active{background:rgba(53,216,255,0.10);color:var(--cyan);border-color:var(--line-strong);box-shadow:0 0 16px rgba(53,216,255,0.12) inset;}
+  .main-nav button.active{background:rgba(53,216,255,0.10);color:var(--cyan);border-color:var(--line-strong);box-shadow:0 0 16px rgba(53,216,255,0.12) inset;position:relative;}
+  .main-nav button.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:hud-pulse 1.8s ease-in-out infinite;}
   .main-nav button:hover:not(.active){background:rgba(255,255,255,0.06);color:var(--ink);}
 
   .gx-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:10px 14px;border:1px solid var(--panel-line);background:rgba(255,255,255,0.02);font-family:var(--mono);font-size:11px;border-radius:3px;}
@@ -259,7 +271,7 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow"><span>ДОКУМЕНТ №001 · ЛИЧНАЯ ТРАЕКТОРИЯ</span><span id="today"></span></div>
+    <div class="eyebrow"><span><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--done);box-shadow:0 0 6px var(--done);animation:hud-pulse 1.6s ease-in-out infinite;margin-right:7px;"></span>ДОКУМЕНТ №001 · ЛИЧНАЯ ТРАЕКТОРИЯ · СИСТЕМА АКТИВНА</span><span id="today"></span></div>
     <h1>ТРАЕКТОРИЯ <span class="arrow">→</span> MIT</h1>
     <div class="subtitle">Специалитет 10.05.01 «Компьютерная безопасность» · ИКИТ СФУ · 2026–2031</div>
     <div class="meta-row">
@@ -426,6 +438,14 @@
       <div class="forecast-note" id="pg-weight-forecast"></div>
     </div>
     <div class="chart-wrap">
+      <div class="chart-title">Рост опыта (XP)</div>
+      <div id="pg-xp-chart"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Бег — динамика по неделям</div>
+      <div id="pg-run-chart"></div>
+    </div>
+    <div class="chart-wrap">
       <div class="chart-title">Достижения</div>
       <div class="ach-grid" id="pg-achievements"></div>
     </div>
@@ -498,7 +518,7 @@
       <div id="jchat-attach-name" style="font-family:var(--mono);font-size:11px;color:var(--amber);margin-top:6px;"></div>
       <div id="jchat-status" class="ai-err"></div>
       <div class="jchat-row" style="margin-top:10px;align-items:center;">
-        <label style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);display:flex;align-items:center;gap:6px;"><input type="checkbox" id="jchat-voice-toggle"> Озвучивать ответы</label>
+        <label style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);display:flex;align-items:center;gap:6px;"><input type="checkbox" id="jchat-voice-toggle"> Озвучивать ответы (по умолчанию включено)</label>
         <button class="btn" id="jchat-context-update">Обновить контекст траектории</button>
         <button class="btn" id="jchat-clear">Очистить историю чата</button>
       </div>
@@ -555,7 +575,19 @@ function computeXP(){
   xp += (state['weight-log']||[]).length*5;
   xp += (state['run-log']||[]).length*5;
   xp += (state['journal']||[]).length*8;
+  xp += (state['bonus-xp']||0);
   return xp;
+}
+function addXP(amount, reason){
+  state['bonus-xp'] = (state['bonus-xp']||0) + amount;
+  saveState(state);
+  const d = todayISO();
+  const hist = state['xp-history'] || {};
+  hist[d] = computeXP();
+  const keys = Object.keys(hist).sort();
+  if(keys.length>90){ keys.slice(0, keys.length-90).forEach(k=>delete hist[k]); }
+  state['xp-history'] = hist;
+  saveState(state);
 }
 function levelFromXP(xp){ return Math.floor(xp/150)+1; }
 function updateGamification(){
@@ -1414,10 +1446,7 @@ function removeLogEntry(key,idx,chartId,tableId,unit){
 function paintLog(key,chartId,tableId,unit){
   const log=state[key]||[]; const chartEl=document.getElementById(chartId); const tableEl=document.getElementById(tableId);
   if(log.length===0){ chartEl.innerHTML='<p style="color:var(--ink-faint);font-size:12.5px;margin-top:10px;">Пока нет записей.</p>'; tableEl.innerHTML=''; return; }
-  const max=Math.max(...log.map(e=>e.val),1);
-  let barsHtml='<div class="bar-chart">';
-  log.forEach(e=>{ const h=Math.max(6,Math.round((e.val/max)*84)); barsHtml+='<div class="bar" style="height:'+h+'px"><span>'+e.val+'</span></div>'; });
-  barsHtml+='</div>'; chartEl.innerHTML=barsHtml;
+  chartEl.innerHTML = svgLineChart(log.map(e=>({label:e.date.slice(5), value:e.val})), unit, key==='weight-log'?'cyan':'violet');
   let rows='<table class="log-table"><tr><th>Дата</th><th>'+unit+'</th><th></th></tr>';
   log.forEach((e,i)=>{ rows+='<tr><td>'+e.date+'</td><td>'+e.val+'</td><td class="del" data-idx="'+i+'">✕</td></tr>'; });
   rows+='</table>'; tableEl.innerHTML=rows;
@@ -1425,6 +1454,51 @@ function paintLog(key,chartId,tableId,unit){
     cell.addEventListener('click', ()=>{ removeLogEntry(key, parseInt(cell.getAttribute('data-idx')), chartId, tableId, unit); });
   });
 }
+
+/* ---- переиспользуемый HUD-график (сглаженная линия + область + свечение) ---- */
+function svgLineChart(points, unit, accent){
+  if(points.length===1) points = [{label:'', value: points[0].value*0.98}, points[0]];
+  const W=680, H=150, padL=8, padR=8, padT=22, padB=24;
+  const vals = points.map(p=>p.value);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const range = (max-min) || 1;
+  const stepX = (W-padL-padR)/(points.length-1 || 1);
+  const xy = points.map((p,i)=>{
+    const x = padL + i*stepX;
+    const y = padT + (H-padT-padB) * (1 - (p.value-min)/range);
+    return {x,y,v:p.value,l:p.label};
+  });
+  let path = 'M '+xy[0].x+' '+xy[0].y;
+  for(let i=1;i<xy.length;i++){
+    const prev=xy[i-1], cur=xy[i];
+    const cx=(prev.x+cur.x)/2;
+    path += ' C '+cx+' '+prev.y+', '+cx+' '+cur.y+', '+cur.x+' '+cur.y;
+  }
+  const areaPath = path+' L '+xy[xy.length-1].x+' '+(H-padB)+' L '+xy[0].x+' '+(H-padB)+' Z';
+  const color = accent==='violet' ? 'var(--violet)' : accent==='amber' ? 'var(--amber)' : 'var(--cyan)';
+  const gid = 'g'+Math.random().toString(36).slice(2,8);
+  let dots = xy.map((p,i)=> '<circle cx="'+p.x+'" cy="'+p.y+'" r="'+(i===xy.length-1?4.5:2.5)+'" fill="'+color+'" stroke="var(--bg-deep)" stroke-width="1.5" filter="url(#glow-'+gid+')"/>').join('');
+  let labels = xy.filter((_,i)=> points.length<=8 || i%Math.ceil(points.length/8)===0 || i===xy.length-1)
+    .map(p=>'<text x="'+p.x+'" y="'+(H-6)+'" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-faint)">'+p.l+'</text>').join('');
+  const lastVal = xy[xy.length-1].v;
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible;">'+
+    '<defs>'+
+      '<linearGradient id="fill-'+gid+'" x1="0" y1="0" x2="0" y2="1">'+
+        '<stop offset="0%" stop-color="'+color+'" stop-opacity="0.35"/>'+
+        '<stop offset="100%" stop-color="'+color+'" stop-opacity="0"/>'+
+      '</linearGradient>'+
+      '<filter id="glow-'+gid+'" x="-100%" y="-100%" width="300%" height="300%">'+
+        '<feGaussianBlur stdDeviation="2.2" result="blur"/>'+
+        '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>'+
+      '</filter>'+
+    '</defs>'+
+    '<text x="'+padL+'" y="14" font-family="var(--mono)" font-size="10" fill="'+color+'">послед.: '+lastVal+' '+unit+'</text>'+
+    '<path d="'+areaPath+'" fill="url(#fill-'+gid+')" stroke="none"/>'+
+    '<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="2" filter="url(#glow-'+gid+')"/>'+
+    dots + labels +
+  '</svg>';
+}
+
 
 /* ================= PLANNER: CALENDAR + JOURNAL ================= */
 let calYear = new Date().getFullYear();
@@ -1536,9 +1610,7 @@ function renderProgress(){
     const days=(new Date(last.date)-new Date(first.date))/86400000;
     const rate = days>0 ? (last.val-first.val)/days : 0;
     const max=Math.max(...wlog.map(e=>e.val),1);
-    let bars='<div class="bar-chart">';
-    wlog.forEach(e=>{ const h=Math.max(6,Math.round((e.val/max)*84)); bars+='<div class="bar" style="height:'+h+'px"><span>'+e.val+'</span></div>'; });
-    bars+='</div>'; wEl.innerHTML=bars;
+    wEl.innerHTML = svgLineChart(wlog.map(e=>({label:e.date.slice(5), value:e.val})), 'кг', 'amber');
     if(rate>0){
       const targetW=first.val+6; const daysNeeded=(targetW-last.val)/rate;
       if(daysNeeded>0){
@@ -1550,6 +1622,19 @@ function renderProgress(){
     wEl.innerHTML = '<p style="color:var(--ink-faint);font-size:12.5px;">Нужно минимум 2 записи веса для графика.</p>';
     fcast.textContent='';
   }
+
+  const xpHist = state['xp-history']||{};
+  const xpKeys = Object.keys(xpHist).sort();
+  const xpChartEl = document.getElementById('pg-xp-chart');
+  if(xpKeys.length>=2){
+    xpChartEl.innerHTML = svgLineChart(xpKeys.map(k=>({label:k.slice(5), value:xpHist[k]})), 'XP', 'cyan');
+  } else {
+    xpChartEl.innerHTML = '<p style="color:var(--ink-faint);font-size:12.5px;">История опыта появится по мере активности на сайте (карточки, тесты, лабораторные, фокус-сессии).</p>';
+  }
+
+  const rlog = state['run-log']||[];
+  const runChartEl = document.getElementById('pg-run-chart');
+  runChartEl.innerHTML = rlog.length>=2 ? svgLineChart(rlog.map(e=>({label:e.date.slice(5), value:e.val})), 'км', 'violet') : '<p style="color:var(--ink-faint);font-size:12.5px;">Нужно минимум 2 записи в журнале бега (вкладка «Форма и бег»).</p>';
 
   const achEl = document.getElementById('pg-achievements');
   achEl.innerHTML = ACHIEVEMENTS.map(a=>{
@@ -1640,7 +1725,7 @@ function initJarvisOnce(){
   document.getElementById('jarvis-url-input').value = state['jarvis-url'] || '';
   document.getElementById('jarvis-groq-key').value = state['jarvis-groq-key'] || '';
   document.getElementById('jarvis-deepseek-key').value = state['jarvis-deepseek-key'] || '';
-  document.getElementById('jchat-voice-toggle').checked = !!state['jarvis-voice-on'];
+  document.getElementById('jchat-voice-toggle').checked = state['jarvis-voice-on'] !== false;
   jarvisMode = state['jarvis-mode'] || 'backend';
   document.querySelectorAll('#jarvis-mode-nav button').forEach(b=>b.classList.toggle('active', b.getAttribute('data-mode')===jarvisMode));
   document.getElementById('jarvis-settings-backend').style.display = jarvisMode==='backend' ? 'block':'none';
@@ -1814,7 +1899,9 @@ async function callDirectProvider(message){
 
 /* ---- TTS: сначала бэкенд Jarvis, если не вышло — голос браузера ---- */
 async function speakReply(text){
-  if(!state['jarvis-voice-on']) return;
+  if(state['jarvis-voice-on'] === false) return; // по умолчанию голос включён, пока явно не выключили
+  const statusEl = document.getElementById('jchat-status');
+  const setSpeaking = on=>{ if(statusEl && !statusEl.textContent.startsWith('Ошибка')) statusEl.innerHTML = on ? '<span style="color:var(--cyan)">🔊 Джарвис говорит…</span>' : ''; };
   const url = state['jarvis-url'];
   if(jarvisMode==='backend' && url){
     try{
@@ -1827,6 +1914,9 @@ async function speakReply(text){
         const blob = await resp.blob();
         const audioURL = URL.createObjectURL(blob);
         const audio = new Audio(audioURL);
+        setSpeaking(true);
+        audio.onended = ()=>setSpeaking(false);
+        audio.onerror = ()=>setSpeaking(false);
         audio.play();
         return;
       }
@@ -1835,6 +1925,9 @@ async function speakReply(text){
   if('speechSynthesis' in window){
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'ru-RU';
+    setSpeaking(true);
+    utter.onend = ()=>setSpeaking(false);
+    utter.onerror = ()=>setSpeaking(false);
     window.speechSynthesis.speak(utter);
   }
 }
